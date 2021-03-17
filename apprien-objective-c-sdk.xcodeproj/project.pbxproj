@@ -1,0 +1,544 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* ApprienProduct.m */; };
+		1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */; };
+		8B560F0625F6099D00630F0D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21BD25E51A4F00900BDC /* libcurl.tbd */; };
+		8BFC210325E3976000900BDC /* ApprienSdk.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC210225E3976000900BDC /* ApprienSdk.h */; };
+		8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210425E3976000900BDC /* ApprienSdk.mm */; };
+		8BFC211325E3985000900BDC /* apprien_tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC211225E3985000900BDC /* apprien_tests.m */; };
+		8BFC211525E3985000900BDC /* libapprien-objective-c-sdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */; };
+		8BFC21CD25E51C2F00900BDC /* Pods_apprien_objective_c_sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */; };
+		8BFC21CF25E51C3900900BDC /* libcurl.4.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21CE25E51C3900900BDC /* libcurl.4.tbd */; };
+		8BFC21F025E65A3600900BDC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21EF25E65A3600900BDC /* libc++.tbd */; };
+		8BFC21F425E65A6900900BDC /* libc.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21F325E65A6900900BDC /* libc.tbd */; };
+		8BFC21F825E65A7700900BDC /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21F725E65A7700900BDC /* libc++.1.tbd */; };
+		8BFC21FC25E65A8500900BDC /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21FB25E65A8500900BDC /* libc++abi.tbd */; };
+		8BFC221825E65B6B00900BDC /* WebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC215A25E4F5AD00900BDC /* WebRequest.h */; };
+		8BFC221F25E65B7F00900BDC /* FormDataSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC216D25E4F7C600900BDC /* FormDataSection.h */; };
+		8BFC222225E65B8400900BDC /* Apprien.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC21D725E5204800900BDC /* Apprien.h */; };
+		8BFC222525E65B8800900BDC /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC21DD25E520E800900BDC /* sha256.h */; };
+		8BFC222825E65B8C00900BDC /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC21E225E5210A00900BDC /* json.hpp */; };
+		8BFC222B25E65B9E00900BDC /* WebRequest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC215B25E4F5AD00900BDC /* WebRequest.mm */; };
+		8BFC222E25E65BA200900BDC /* Apprien.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC21D625E5204800900BDC /* Apprien.mm */; };
+		8BFC223125E65BA600900BDC /* sha256.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC21DC25E520E800900BDC /* sha256.mm */; };
+		8BFC227625E66B9E00900BDC /* ApprienSdk.h in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210225E3976000900BDC /* ApprienSdk.h */; };
+		8BFC227925E66BA100900BDC /* ApprienSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210425E3976000900BDC /* ApprienSdk.mm */; };
+		8BFC229725E67D0D00900BDC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21EF25E65A3600900BDC /* libc++.tbd */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8BFC211625E3985000900BDC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8BFC20F725E3976000900BDC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BFC20FE25E3976000900BDC;
+			remoteInfo = "apprien-objective-c-sdk";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		06945E19FF10F59D8066F1E6 /* Pods-apprien-objective-c-sdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.debug.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.debug.xcconfig"; sourceTree = "<group>"; };
+		0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_apprien_objective_c_sdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B182BED67977C3E8D5C5384 /* ApprienProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApprienProduct.m; sourceTree = "<group>"; };
+		1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApprienProduct.h; sourceTree = "<group>"; };
+		572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.release.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.release.xcconfig"; sourceTree = "<group>"; };
+		8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libapprien-objective-c-sdk.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BFC210225E3976000900BDC /* ApprienSdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApprienSdk.h; sourceTree = "<group>"; };
+		8BFC210425E3976000900BDC /* ApprienSdk.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ApprienSdk.mm; sourceTree = "<group>"; };
+		8BFC211025E3985000900BDC /* apprien-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "apprien-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BFC211225E3985000900BDC /* apprien_tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apprien_tests.m; sourceTree = "<group>"; };
+		8BFC211425E3985000900BDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BFC215A25E4F5AD00900BDC /* WebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebRequest.h; path = "apprien-objective-c-sdk/src/WebRequest.h"; sourceTree = SOURCE_ROOT; };
+		8BFC215B25E4F5AD00900BDC /* WebRequest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WebRequest.mm; path = "apprien-objective-c-sdk/src/WebRequest.mm"; sourceTree = SOURCE_ROOT; };
+		8BFC216D25E4F7C600900BDC /* FormDataSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDataSection.h; sourceTree = "<group>"; };
+		8BFC21BD25E51A4F00900BDC /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
+		8BFC21CE25E51C3900900BDC /* libcurl.4.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.4.tbd; path = usr/lib/libcurl.4.tbd; sourceTree = SDKROOT; };
+		8BFC21D625E5204800900BDC /* Apprien.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Apprien.mm; sourceTree = "<group>"; };
+		8BFC21D725E5204800900BDC /* Apprien.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apprien.h; sourceTree = "<group>"; };
+		8BFC21DC25E520E800900BDC /* sha256.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = sha256.mm; sourceTree = "<group>"; };
+		8BFC21DD25E520E800900BDC /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
+		8BFC21E225E5210A00900BDC /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		8BFC21EF25E65A3600900BDC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		8BFC21F325E65A6900900BDC /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
+		8BFC21F725E65A7700900BDC /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		8BFC21FB25E65A8500900BDC /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8BFC20FD25E3976000900BDC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BFC21F025E65A3600900BDC /* libc++.tbd in Frameworks */,
+				8BFC21FC25E65A8500900BDC /* libc++abi.tbd in Frameworks */,
+				8BFC21F825E65A7700900BDC /* libc++.1.tbd in Frameworks */,
+				8BFC21F425E65A6900900BDC /* libc.tbd in Frameworks */,
+				8BFC21CF25E51C3900900BDC /* libcurl.4.tbd in Frameworks */,
+				8BFC21CD25E51C2F00900BDC /* Pods_apprien_objective_c_sdk.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BFC210D25E3985000900BDC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B560F0625F6099D00630F0D /* libcurl.tbd in Frameworks */,
+				8BFC229725E67D0D00900BDC /* libc++.tbd in Frameworks */,
+				8BFC211525E3985000900BDC /* libapprien-objective-c-sdk.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1E263B664A253575BC559B24 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8BFC21FB25E65A8500900BDC /* libc++abi.tbd */,
+				8BFC21F725E65A7700900BDC /* libc++.1.tbd */,
+				8BFC21F325E65A6900900BDC /* libc.tbd */,
+				8BFC21EF25E65A3600900BDC /* libc++.tbd */,
+				8BFC21CE25E51C3900900BDC /* libcurl.4.tbd */,
+				8BFC21BD25E51A4F00900BDC /* libcurl.tbd */,
+				0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */,
+			);
+			name = Frameworks;
+			sourceTree = SOURCE_ROOT;
+		};
+		8BFC20F625E3976000900BDC = {
+			isa = PBXGroup;
+			children = (
+				8BFC210125E3976000900BDC /* apprien-objective-c-sdk */,
+				8BFC211125E3985000900BDC /* apprien-tests */,
+				8BFC210025E3976000900BDC /* Products */,
+				A3FAA7398AB86EE3652839AD /* Pods */,
+				1E263B664A253575BC559B24 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8BFC210025E3976000900BDC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */,
+				8BFC211025E3985000900BDC /* apprien-tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8BFC210125E3976000900BDC /* apprien-objective-c-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				8BFC212325E3E9AF00900BDC /* src */,
+				8BFC210225E3976000900BDC /* ApprienSdk.h */,
+				8BFC210425E3976000900BDC /* ApprienSdk.mm */,
+				1B182BED67977C3E8D5C5384 /* ApprienProduct.m */,
+				1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */,
+			);
+			path = "apprien-objective-c-sdk";
+			sourceTree = "<group>";
+		};
+		8BFC211125E3985000900BDC /* apprien-tests */ = {
+			isa = PBXGroup;
+			children = (
+				8BFC211225E3985000900BDC /* apprien_tests.m */,
+				8BFC211425E3985000900BDC /* Info.plist */,
+			);
+			path = "apprien-tests";
+			sourceTree = SOURCE_ROOT;
+		};
+		8BFC212325E3E9AF00900BDC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				8BFC21E225E5210A00900BDC /* json.hpp */,
+				8BFC21DC25E520E800900BDC /* sha256.mm */,
+				8BFC21DD25E520E800900BDC /* sha256.h */,
+				8BFC21D625E5204800900BDC /* Apprien.mm */,
+				8BFC21D725E5204800900BDC /* Apprien.h */,
+				8BFC215B25E4F5AD00900BDC /* WebRequest.mm */,
+				8BFC215A25E4F5AD00900BDC /* WebRequest.h */,
+				8BFC216D25E4F7C600900BDC /* FormDataSection.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		A3FAA7398AB86EE3652839AD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				06945E19FF10F59D8066F1E6 /* Pods-apprien-objective-c-sdk.debug.xcconfig */,
+				572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8BFC20FB25E3976000900BDC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BFC210325E3976000900BDC /* ApprienSdk.h in Headers */,
+				8BFC222825E65B8C00900BDC /* json.hpp in Headers */,
+				8BFC221825E65B6B00900BDC /* WebRequest.h in Headers */,
+				8BFC222525E65B8800900BDC /* sha256.h in Headers */,
+				8BFC222225E65B8400900BDC /* Apprien.h in Headers */,
+				8BFC221F25E65B7F00900BDC /* FormDataSection.h in Headers */,
+				1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8BFC20FE25E3976000900BDC /* apprien-objective-c-sdk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BFC210825E3976000900BDC /* Build configuration list for PBXNativeTarget "apprien-objective-c-sdk" */;
+			buildPhases = (
+				65B29705C961014052F88049 /* [CP] Check Pods Manifest.lock */,
+				8BFC20FB25E3976000900BDC /* Headers */,
+				8BFC20FC25E3976000900BDC /* Sources */,
+				8BFC20FD25E3976000900BDC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "apprien-objective-c-sdk";
+			productName = "apprien-objective-c-sdk";
+			productReference = 8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		8BFC210F25E3985000900BDC /* apprien-tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BFC211825E3985000900BDC /* Build configuration list for PBXNativeTarget "apprien-tests" */;
+			buildPhases = (
+				8BFC210C25E3985000900BDC /* Sources */,
+				8BFC210D25E3985000900BDC /* Frameworks */,
+				8BFC210E25E3985000900BDC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8BFC211725E3985000900BDC /* PBXTargetDependency */,
+			);
+			name = "apprien-tests";
+			productName = "apprien-tests";
+			productReference = 8BFC211025E3985000900BDC /* apprien-tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8BFC20F725E3976000900BDC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1230;
+				TargetAttributes = {
+					8BFC20FE25E3976000900BDC = {
+						CreatedOnToolsVersion = 12.3;
+					};
+					8BFC210F25E3985000900BDC = {
+						CreatedOnToolsVersion = 12.3;
+					};
+				};
+			};
+			buildConfigurationList = 8BFC20FA25E3976000900BDC /* Build configuration list for PBXProject "apprien-objective-c-sdk" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8BFC20F625E3976000900BDC;
+			productRefGroup = 8BFC210025E3976000900BDC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8BFC20FE25E3976000900BDC /* apprien-objective-c-sdk */,
+				8BFC210F25E3985000900BDC /* apprien-tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8BFC210E25E3985000900BDC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		65B29705C961014052F88049 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-apprien-objective-c-sdk-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8BFC20FC25E3976000900BDC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BFC223125E65BA600900BDC /* sha256.mm in Sources */,
+				8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */,
+				8BFC222E25E65BA200900BDC /* Apprien.mm in Sources */,
+				8BFC222B25E65B9E00900BDC /* WebRequest.mm in Sources */,
+				1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BFC210C25E3985000900BDC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BFC211325E3985000900BDC /* apprien_tests.m in Sources */,
+				8BFC227625E66B9E00900BDC /* ApprienSdk.h in Sources */,
+				8BFC227925E66BA100900BDC /* ApprienSdk.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8BFC211725E3985000900BDC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8BFC20FE25E3976000900BDC /* apprien-objective-c-sdk */;
+			targetProxy = 8BFC211625E3985000900BDC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8BFC210625E3976000900BDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8BFC210725E3976000900BDC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8BFC210925E3976000900BDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 06945E19FF10F59D8066F1E6 /* Pods-apprien-objective-c-sdk.debug.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8BFC210A25E3976000900BDC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8BFC211925E3985000900BDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "apprien-tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "phz-full-stack.apprien-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8BFC211A25E3985000900BDC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "apprien-tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "phz-full-stack.apprien-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8BFC20FA25E3976000900BDC /* Build configuration list for PBXProject "apprien-objective-c-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BFC210625E3976000900BDC /* Debug */,
+				8BFC210725E3976000900BDC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BFC210825E3976000900BDC /* Build configuration list for PBXNativeTarget "apprien-objective-c-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BFC210925E3976000900BDC /* Debug */,
+				8BFC210A25E3976000900BDC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BFC211825E3985000900BDC /* Build configuration list for PBXNativeTarget "apprien-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BFC211925E3985000900BDC /* Debug */,
+				8BFC211A25E3985000900BDC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8BFC20F725E3976000900BDC /* Project object */;
+}
