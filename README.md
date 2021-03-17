@@ -248,7 +248,7 @@ Unit tests for the SDK. The tests can be easily run using Unity Test Runner. If 
 ## Troubleshooting
     Apprien prices won't show up in game. Only default fixed prices are visible.
 
-See Apprien SDK Test Plan to check for typical errors and use examples. Other reasons might be that the Id's used for searching do not exists. Use the Apprien dashboard to add these products.
+See Apprien SDK Test Plan to check for typical errors and use examples. Other reason might be that the Id's used for searching do not exists. You can use Apprien dashboard to add these products.
 
 ## Links
 
