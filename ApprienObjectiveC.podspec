@@ -67,8 +67,6 @@ Pod::Spec.new do |spec|
 #  spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :tag => 'v0.0.1-alpha.1' }
   spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :branch => 'fix-issue-cannot-find-curl-and-remove-unwanted-diagram' }
   
-# spec.source       = { :path => '~/workspace/github/ApprienObjectiveC/'}
-
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  CocoaPods is smart about how it includes source code. For source files

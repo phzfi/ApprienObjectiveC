@@ -10,12 +10,11 @@
 		1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* ApprienProduct.m */; };
 		1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */; };
 		8B560F0625F6099D00630F0D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21BD25E51A4F00900BDC /* libcurl.tbd */; };
-		8B5CC6632608E1C400B856AA /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5CC65B2608E1B700B856AA /* libcurl.tbd */; };
+		8B5CC68A2609CE5100B856AA /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5CC6842609CE1700B856AA /* libcurl.tbd */; };
 		8BFC210325E3976000900BDC /* ApprienSdk.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC210225E3976000900BDC /* ApprienSdk.h */; };
 		8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210425E3976000900BDC /* ApprienSdk.mm */; };
 		8BFC211325E3985000900BDC /* apprien_tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC211225E3985000900BDC /* apprien_tests.m */; };
 		8BFC211525E3985000900BDC /* libapprien-objective-c-sdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */; };
-		8BFC21CD25E51C2F00900BDC /* Pods_apprien_objective_c_sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */; };
 		8BFC221825E65B6B00900BDC /* WebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC215A25E4F5AD00900BDC /* WebRequest.h */; };
 		8BFC221F25E65B7F00900BDC /* FormDataSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC216D25E4F7C600900BDC /* FormDataSection.h */; };
 		8BFC222225E65B8400900BDC /* Apprien.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC21D725E5204800900BDC /* Apprien.h */; };
@@ -45,7 +44,8 @@
 		1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApprienProduct.h; sourceTree = "<group>"; };
 		572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.release.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.release.xcconfig"; sourceTree = "<group>"; };
 		8B5CC64C2608E16E00B856AA /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib/libcurl.tbd; sourceTree = DEVELOPER_DIR; };
-		8B5CC65B2608E1B700B856AA /* libcurl.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libcurl.tbd; sourceTree = "<group>"; };
+		8B5CC6802609CCA400B856AA /* libcurl.4.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libcurl.4.tbd; sourceTree = "<group>"; };
+		8B5CC6842609CE1700B856AA /* libcurl.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libcurl.tbd; sourceTree = "<group>"; };
 		8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libapprien-objective-c-sdk.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BFC210225E3976000900BDC /* ApprienSdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApprienSdk.h; sourceTree = "<group>"; };
 		8BFC210425E3976000900BDC /* ApprienSdk.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ApprienSdk.mm; sourceTree = "<group>"; };
@@ -68,8 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BFC21CD25E51C2F00900BDC /* Pods_apprien_objective_c_sdk.framework in Frameworks */,
-				8B5CC6632608E1C400B856AA /* libcurl.tbd in Frameworks */,
+				8B5CC68A2609CE5100B856AA /* libcurl.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +117,6 @@
 		8BFC210125E3976000900BDC /* apprien-objective-c-sdk */ = {
 			isa = PBXGroup;
 			children = (
-				8B5CC65B2608E1B700B856AA /* libcurl.tbd */,
 				8BFC212325E3E9AF00900BDC /* src */,
 				8BFC210225E3976000900BDC /* ApprienSdk.h */,
 				8BFC210425E3976000900BDC /* ApprienSdk.mm */,
@@ -140,6 +138,8 @@
 		8BFC212325E3E9AF00900BDC /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8B5CC6802609CCA400B856AA /* libcurl.4.tbd */,
+				8B5CC6842609CE1700B856AA /* libcurl.tbd */,
 				8BFC21E225E5210A00900BDC /* json.hpp */,
 				8BFC21DC25E520E800900BDC /* sha256.mm */,
 				8BFC21DD25E520E800900BDC /* sha256.h */,
@@ -447,6 +447,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
+					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -468,6 +469,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
+					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
