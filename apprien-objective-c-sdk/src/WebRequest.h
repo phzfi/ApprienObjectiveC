@@ -3,7 +3,9 @@
 #include <functional>
 #include <sstream>
 #import "FormDataSection.h"
+
 #import <curl/curl.h>
+
 
 /// <summary>
 /// The WebRequest class is used to communicate with web servers.

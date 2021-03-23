@@ -48,14 +48,8 @@ Pod::Spec.new do |spec|
   # Or just: spec.author    = "MikaelKorpinen"
   # spec.authors            = { "MikaelKorpinen" => "53366205+MikaelKorpinen@users.noreply.github.com" }
 
-  # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If this Pod runs only on iOS or OS X, then specify the platform and
-  #  the deployment target. You can optionally include the target after the platform.
-  #
 
-  # spec.platform     = :ios
-  # spec.platform     = :ios, "5.0"
+   spec.platform     = :ios, "9.3"
 
   #  When using multiple platforms
   # spec.ios.deployment_target = "5.0"
@@ -70,9 +64,9 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git'}
-
-
+#  spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :tag => 'v0.0.1-alpha.1' }
+  spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :branch => 'fix-issue-cannot-find-curl-and-remove-unwanted-diagram' }
+  
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  CocoaPods is smart about how it includes source code. For source files
@@ -87,33 +81,10 @@ Pod::Spec.new do |spec|
   # spec.public_header_files = "Classes/**/*.h"
 
 
-  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  A list of resources included with the Pod. These are copied into the
-  #  target bundle with a build phase script. Anything else will be cleaned.
-  #  You can preserve files from being cleaned, please don't preserve
-  #  non-essential files like tests, examples and documentation.
-  #
+spec.framework  = "libcurl"
+spec.ios.vendored_frameworks = 'libcurl', 'curl'
 
-  # spec.resource  = "icon.png"
-  # spec.resources = "Resources/*.png"
-
-  # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
-
-
-  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Link your library with frameworks, or libraries. Libraries do not include
-  #  the lib prefix of their name.
-  #
-
-  # spec.framework  = "SomeFramework"
-  # spec.frameworks = "SomeFramework", "AnotherFramework"
-
-  # spec.library   = "iconv"
-  # spec.libraries = "iconv", "xml2"
-
-
+spec.library='curl'
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  If your library depends on compiler flags you can set them in the xcconfig hash
