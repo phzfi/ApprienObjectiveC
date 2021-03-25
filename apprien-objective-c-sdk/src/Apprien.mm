@@ -66,9 +66,7 @@ bool ApprienManager::CheckTokenValidity() {
     request.SetRequestHeader("Authorization", "Bearer " + token);
     request.SendWebRequest();
 
-    if (request.responseCode != 0) {
-        SendError(request.responseCode, "Error occured while checking token validity: HTTP error: " + request.errorMessage);
-    }
+
     return request.isDone;
 }
 

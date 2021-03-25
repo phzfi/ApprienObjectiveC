@@ -3,8 +3,8 @@
 #include <functional>
 #include <sstream>
 #import "FormDataSection.h"
+#import <Foundation/Foundation.h>
 
-#import <curl/curl.h>
 
 
 /// <summary>
@@ -13,11 +13,10 @@
 class WebRequest
 {
 private:
-    CURL *curl = NULL;
 
     struct curl_slist *chunk = NULL;
 
-    bool Initialize();
+    bool Initialize(std::string url, NSString* httpMethod);
 
 public:
     /// <summary>
@@ -64,7 +63,7 @@ public:
     /// <summary>
     /// Set a custom value to HTTP request header.
     /// </summary>
-    void SetRequestHeader(std::string name, std::string value);
+    void SetRequestHeader(std::string name, std::string  value);
 
     /// <summary>
     /// Create a WebRequest for HTTP GET.

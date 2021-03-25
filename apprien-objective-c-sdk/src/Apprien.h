@@ -127,7 +127,7 @@ namespace Apprien {
         /// <summary>
         /// Apprien REST API endpoint for testing the availability of the service
         /// </summary>
-        const char *REST_GET_APPRIEN_STATUS = "https://game.apprien.com/status";
+        const char *REST_GET_APPRIEN_STATUS = "http://game.apprien.com/status";
 
         /// <summary>
         /// Apprien REST API endpoint for testing the validity of the given token

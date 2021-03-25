@@ -8,7 +8,6 @@
 #import <XCTest/XCTest.h>
 #import "ApprienSdk.h"
 #import "ApprienProduct.h"
-#import <curl/curl.h>
 
 @interface apprien_tests : XCTestCase
 
@@ -239,42 +238,6 @@ NSArray <NSString *> *testIAPids;
     }];
 }
 
-- (void)testCurlWorks {
-    CURL *curl;
-    CURLcode res;
-
-    /* In windows, this will init the winsock stuff */
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    /* get a curl handle */
-    curl = curl_easy_init();
-    if (curl) {
-        /* First set the URL that is about to receive our POST. This URL can
-           just as well be a https:// URL if that is what should receive the
-           data. */
-        curl_easy_setopt(curl, CURLOPT_URL, "https://www.keycdn.com");
-        char *response_string[5000];
-        char *header_string[5000];
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFunction);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
-        curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
-
-        /* Perform the request, res will get the return code */
-        res = curl_easy_perform(curl);
-        /* Check for errors */
-        if (res != CURLE_OK) {
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-            XCTAssertTrue(FALSE);
-        } else {
-            XCTAssertTrue(TRUE);
-        }
-
-        /* always cleanup */
-        curl_easy_cleanup(curl);
-    }
-    curl_global_cleanup();
-}
 
 size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 
@@ -315,6 +278,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         //Connection to Apprien down
         XCTAssertTrue(FALSE);
     }
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
 }
 
 - (void)testTokenValidity {
@@ -325,16 +289,19 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         //Success
         XCTAssertTrue(FALSE);
     }
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.25, false);
 }
 
 //Test Apprien service
 - (void)testApprienServiceStatus {
+    
     if ([apprienSdk CheckServiceStatus] == TRUE) {
         //Success
         XCTAssertTrue(TRUE);
     } else {
-        //Success
+        //Fail
         XCTAssertTrue(FALSE);
     }
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
 }
 @end
