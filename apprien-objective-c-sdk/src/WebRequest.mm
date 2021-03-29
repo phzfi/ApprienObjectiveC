@@ -39,6 +39,7 @@ NSMutableURLRequest *request;
 NSURLSession *session;
 NSURLSessionDataTask *dataTask;
 NSURLSessionUploadTask *uploadTask;
+
 bool WebRequest::Initialize(std::string url, NSString* httpMethod)
 {
     
@@ -85,15 +86,12 @@ bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
 
 void WebRequest::SetRequestHeader(std::string name, std::string  value)
 {
-    @autoreleasepool {
-        std::string header = name;
-        NSMutableDictionary *headers = [[NSMutableDictionary alloc]init];
-        
-        if([NSString isEqual:@""] == false) {
-            [headers setObject:[NSString stringWithCString: value.c_str() encoding:NSString.defaultCStringEncoding] forKey:[NSString stringWithCString: name.c_str() encoding:NSString.defaultCStringEncoding]];
-        }
-        [request setAllHTTPHeaderFields:headers];
-    }
+  
+    NSString *headerName = [NSString stringWithCString: name.c_str() encoding:NSString.defaultCStringEncoding];
+    NSString *headerValue = [NSString stringWithCString: value.c_str() encoding:NSString.defaultCStringEncoding];
+      
+    
+    [request addValue:headerValue forHTTPHeaderField:headerName];
 }
 
 bool WebRequest::Get(std::string url)
@@ -103,15 +101,15 @@ bool WebRequest::Get(std::string url)
     dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response; //must do type cast to get accss to statusCode etc
-        responseCode = (int)httpResponse.statusCode;
-        errorMessage = error.code;
+        int responseCode = (int)httpResponse.statusCode;
+        NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
         if (responseCode != 0) {
          //   SendError(request.responseCode, "Error occured while checking token validity: HTTP error: " + request.errorMessage);
-            NSLog(@"Response code is: %d",responseCode);
-            NSLog(@"Error message is:  %@",[NSString stringWithCString: errorMessage.c_str() encoding:NSString.defaultCStringEncoding]);
+            NSLog(@"Response code is: %d", responseCode);
+            NSLog(@"Error message is:  %@", errorMessage);
         }
     }];
-    NSLog(@"Response code is: %d",responseCode);
+
     return true;
 }
 

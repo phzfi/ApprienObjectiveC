@@ -145,6 +145,7 @@ NSArray <NSString *> *testIAPids;
     BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
     }];
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.1, false);
     //wait for async to complete
     while (!isDone) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
@@ -286,7 +287,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         //Success
         XCTAssertTrue(TRUE);
     } else {
-        //Success
+        //Fail
         XCTAssertTrue(FALSE);
     }
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.25, false);

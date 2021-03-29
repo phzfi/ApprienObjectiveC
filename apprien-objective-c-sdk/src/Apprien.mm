@@ -26,6 +26,11 @@ public:
     std::list<ApprienProductListProduct> products;
 };
 
+int requestResponseCode;
+std::string httpErrorMessage;
+
+void SendError(int code, std::basic_string<char, std::char_traits<char>, std::allocator<char>> basicString);
+
 void from_json(const json &j, ApprienProductList &s) {
     const json &sj = j.at("products");
     s.products.resize(sj.size());
@@ -36,6 +41,13 @@ std::string ApprienManager::ApprienIdentifier() {
     std::stringstream ss;
     ss << std::hex << SHA256(deviceUniqueIdentifier)[0];
     return ss.str();
+}
+
+void ApprienManager::CatchAndSendRequestError() {
+    if (requestResponseCode != 0) {
+        std::string errorMessage = "Error occured while posting products shown: HTTP error: " + httpErrorMessage;
+        SendError(requestResponseCode, errorMessage);
+    }
 }
 
 void ApprienManager::SendError(int responseCode, std::string errorMessage) {
@@ -71,8 +83,11 @@ bool ApprienManager::CheckTokenValidity() {
 }
 
 std::vector<ApprienManager::ApprienProduct> Products;
+int responseCode;
+std::string responseErrorMessage;
 
 std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> OnFetchPrices;
+
 
 /// <summary>
 /// Parse the JSON data and update the variant IAP ids.
@@ -103,7 +118,7 @@ void FetchPrices(char *data) {
     delete (productLookup);
 }
 
-bool ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback) {
+WebRequest ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback) {
     char url[5000];
     OnFetchPrices = callback;
     Products = apprienProducts;
@@ -114,12 +129,11 @@ bool ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprienProdu
     request.SetRequestHeader("Session-Id", ApprienIdentifier());
     request.SendWebRequest(FetchPrices);
 
-    if (request.responseCode != 0) {
-        SendError(request.responseCode, "Error occured while fetching Apprien prices: HTTP error: " + request.errorMessage);
-    }
+    responseCode = request.responseCode;
+    responseErrorMessage = request.errorMessage;
     apprienProducts = Products;
 
-    return request.isDone;
+    return request;
 }
 
 bool ApprienManager::PostReceipt(std::string receiptJson) {
@@ -134,9 +148,7 @@ bool ApprienManager::PostReceipt(std::string receiptJson) {
     request.SetRequestHeader("Authorization", "Bearer " + token);
     request.SendWebRequest();
 
-    if (request.responseCode != 0) {
-        SendError(request.responseCode, "Error occured while fetching Apprien prices: HTTP error: " + request.errorMessage);
-    }
+
     return request.isDone;
 }
 

@@ -104,7 +104,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
  that contain variant ids. From these can the prices be extracted.
  @return BOOL isDone is returned after the request has been completed.
  */
-- (BOOL*)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback;
+- (BOOL)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback;
 
 /*!
  @abstract Initializes a new instance of the ApprienManager

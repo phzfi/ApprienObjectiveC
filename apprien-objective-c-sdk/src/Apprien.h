@@ -123,7 +123,12 @@ namespace Apprien {
         /// Request timeout in seconds
         /// </summary>
         int REQUEST_TIMEOUT = 5;
-
+        
+        /// <summary>
+        /// Sends error message when Apprien encounter any problems
+        /// </summary>
+        void CatchAndSendRequestError();
+        
         /// <summary>
         /// Apprien REST API endpoint for testing the availability of the service
         /// </summary>
@@ -157,7 +162,7 @@ namespace Apprien {
         /// <summary>
         /// Apprien REST API endpoint for POSTing a notice to Apprien that product was shown.
         /// </summary>
-        const char *REST_POST_PRODUCTS_SHOWN_URL = "https://game.apprien.com/api/v1/stores/%s/shown/products";
+        const char *REST_POST_PRODUCTS_SHOWN_URL = "http://game.apprien.com/api/v1/stores/%s/shown/products";
 
         /// <summary>
         /// Gets the store's string identifier for the currently set ApprienIntegrationType
@@ -218,7 +223,7 @@ namespace Apprien {
         /// </para>
         /// </summary>
         /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
-        bool FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
+        WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
 
         /// <summary>
         /// <para>

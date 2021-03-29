@@ -115,18 +115,25 @@ Apprien::ApprienManager *apprienManager;
     return apprienManager->CheckTokenValidity();
 }
 
-- (BOOL &)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
-    @autoreleasepool {
+- (BOOL)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
+    
+    __block BOOL isDone = FALSE;
+  
         std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
+        
         apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
-        __block BOOL isDone = FALSE;
-        apprienManager->FetchApprienPrices(apprienProductsC, ^(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC) {
+        
+        apprienManager->FetchApprienPrices(apprienProductsC, ^(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)
+        {
             NSArray <ApprienProduct *> *apprienProductsAndPrices = [self CopyApprienProductsFromCPPToObjC:apprienProducts apprienProductsC:apprienProductsC];
+            
+            apprienManager->CatchAndSendRequestError();
+           
             callback(apprienProductsAndPrices);
             isDone = TRUE;
         });
         return isDone;
-    }
+    
 }
 
 - (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
