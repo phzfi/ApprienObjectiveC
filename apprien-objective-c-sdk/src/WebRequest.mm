@@ -70,13 +70,14 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
 bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
 {
     if(dataTask){
-        OnWebRequest = callback;
         [dataTask resume]; //send the HTTP request
+        OnWebRequest = callback;
         return true;
     }
     if(uploadTask){
-        OnWebRequest = callback;
+
         [uploadTask resume];//send the HTTP request
+        OnWebRequest = callback;
         return true;
     }
 
@@ -94,7 +95,7 @@ void WebRequest::SetRequestHeader(std::string name, std::string  value)
     [request addValue:headerValue forHTTPHeaderField:headerName];
 }
 
-bool WebRequest::Get(std::string url)
+NSURLSessionDataTask *WebRequest::Get(std::string url, std::function<void(int response, int errorCode)> callBack)
 {
     Initialize(url, @"GET");
     
@@ -104,16 +105,17 @@ bool WebRequest::Get(std::string url)
         int responseCode = (int)httpResponse.statusCode;
         NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
         if (responseCode != 0) {
-         //   SendError(request.responseCode, "Error occured while checking token validity: HTTP error: " + request.errorMessage);
+            //SendError(request.responseCode, "Error occurred while checking token validity: HTTP error: " + request.errorMessage);
             NSLog(@"Response code is: %d", responseCode);
             NSLog(@"Error message is:  %@", errorMessage);
         }
+        callBack(responseCode, (long)error.code);
     }];
-
-    return true;
+  
+    return dataTask;
 }
 
-bool WebRequest::Post(std::string url, std::list<FormDataSection> formSections)
+NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSection> formSections)
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];;
     
@@ -121,38 +123,33 @@ bool WebRequest::Post(std::string url, std::list<FormDataSection> formSections)
     {
         [dictionary setObject:[NSString stringWithCString: item.Data encoding:NSString.defaultCStringEncoding ] forKey:[NSString stringWithCString: item.Name.c_str() encoding:NSString.defaultCStringEncoding ] ];
     }
-    // 3
     
     NSError *error = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary
                     options:kNilOptions error:&error];
     
     if (!error) {
-        // 4
         uploadTask = [session uploadTaskWithRequest:request fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
             // Handle response here
         }];
         
-        return false;
+       
     }
-    return true;
+    return uploadTask;
 }
 
-bool WebRequest::Post(std::string url, const char *postData)
+NSURLSessionUploadTask *WebRequest::Post(std::string url, const char *postData)
 {
     NSString *str = [NSString stringWithCString: postData encoding:NSString.defaultCStringEncoding ];
     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
     
     NSError *error = nil;
+
+    uploadTask = [session uploadTaskWithRequest:request
+                    fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
+        // Handle response here
+    }];
     
-    if (!error) {
-        // 4
-        uploadTask = [session uploadTaskWithRequest:request
-                        fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
-            // Handle response here
-        }];
-        
-        return false;
-    }
-    return true;
+    
+    return uploadTask;
 }

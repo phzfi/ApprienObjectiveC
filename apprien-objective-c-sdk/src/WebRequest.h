@@ -68,16 +68,16 @@ public:
     /// <summary>
     /// Create a WebRequest for HTTP GET.
     /// </summary>
-    bool Get(std::string url);
+    NSURLSessionDataTask *Get(std::string url, std::function<void(int response, int error)> callBack);
 
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.
     /// </summary>
-    bool Post(std::string url, std::list<FormDataSection> formSections);
+    NSURLSessionUploadTask *Post(std::string url, std::list<FormDataSection> formSections);
 
     /// <summary>
     /// Create a WebRequest configured to send post data to a server via HTTP POST.
     /// </summary>
-    bool Post(std::string url, const char *postData = nullptr);
+    NSURLSessionUploadTask *Post(std::string url, const char *postData = nullptr);
 };
 

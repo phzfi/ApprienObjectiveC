@@ -55,13 +55,13 @@ void ApprienManager::SendError(int responseCode, std::string errorMessage) {
     auto request = WebRequest();
     std::string code = std::to_string(responseCode);
     std::snprintf(url, sizeof(url), REST_POST_ERROR_URL, errorMessage.c_str(), code.c_str(), gamePackageName.c_str(), StoreIdentifier().c_str());
-    request.Get(url);
+   // request.Get(url, std::function<void(WebRequest)>());
     request.SendWebRequest();
 }
 
 bool ApprienManager::CheckServiceStatus() {
     auto request = WebRequest();
-    request.Get(REST_GET_APPRIEN_STATUS);
+    request.Get(REST_GET_APPRIEN_STATUS, std::function<void(int response, int errorCode)>());
     request.SendWebRequest();
 
     if (request.responseCode != 0) {
@@ -70,16 +70,19 @@ bool ApprienManager::CheckServiceStatus() {
     return request.isDone;
 }
 
-bool ApprienManager::CheckTokenValidity() {
+
+
+void ApprienManager::CheckTokenValidity(std::function<void(int response, int errorCode)> callback) {
     char url[5000];
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_GET_VALIDATE_TOKEN_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
-    request.Get(url);
+    
+    
+    NSURLSessionDataTask *dataTask = request.Get(url, callback);
     request.SetRequestHeader("Authorization", "Bearer " + token);
-    request.SendWebRequest();
-
-
-    return request.isDone;
+    [dataTask resume];
+    
+   
 }
 
 std::vector<ApprienManager::ApprienProduct> Products;
@@ -87,6 +90,7 @@ int responseCode;
 std::string responseErrorMessage;
 
 std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> OnFetchPrices;
+
 
 
 /// <summary>
@@ -124,7 +128,7 @@ WebRequest ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprie
     Products = apprienProducts;
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_GET_ALL_PRICES_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
-    request.Get(url);
+    request.Get(url, std::function<void(int reponse, int errorCode)>());
     request.SetRequestHeader("Authorization", "Bearer " + token);
     request.SetRequestHeader("Session-Id", ApprienIdentifier());
     request.SendWebRequest(FetchPrices);
@@ -200,7 +204,7 @@ std::vector<ApprienManager::ApprienProduct> ApprienManager::ApprienProduct::From
 
 bool ApprienManager::TestConnection(bool &statusCheck, bool &tokenCheck) {
     // Check service status and validate the token
-    statusCheck = (CheckServiceStatus());
-    tokenCheck = (CheckTokenValidity());
+  //  statusCheck = (CheckServiceStatus());
+//    tokenCheck = (CheckTokenValidity());
     return statusCheck && tokenCheck;
 }

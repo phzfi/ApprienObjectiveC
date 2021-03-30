@@ -111,8 +111,15 @@ Apprien::ApprienManager *apprienManager;
     return apprienManager->CheckServiceStatus();
 }
 
-- (BOOL)CheckTokenValidity {
-    return apprienManager->CheckTokenValidity();
+- (void)CheckTokenValidity:(void (^)(BOOL tokenIsValid))callback {
+     apprienManager->CheckTokenValidity(^(int response, int error){
+         if(error == 0 && response == 0){
+             callback(true);
+         }
+         else{
+             callback(false);
+         }
+     });
 }
 
 - (BOOL)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
@@ -133,7 +140,6 @@ Apprien::ApprienManager *apprienManager;
             isDone = TRUE;
         });
         return isDone;
-    
 }
 
 - (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {

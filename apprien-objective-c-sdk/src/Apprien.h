@@ -210,7 +210,7 @@ namespace Apprien {
         /// <summary>
         /// Validates the supplied access token with the Apprien API
         /// </summary>
-        bool CheckTokenValidity();
+        void CheckTokenValidity(std::function<void(int response, int errorCode)> callback);
 
         /// <summary>
         /// <para>

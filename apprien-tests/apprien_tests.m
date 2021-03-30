@@ -283,14 +283,12 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 }
 
 - (void)testTokenValidity {
-    if ([apprienSdk CheckTokenValidity] == TRUE) {
-        //Success
-        XCTAssertTrue(TRUE);
-    } else {
-        //Fail
-        XCTAssertTrue(FALSE);
-    }
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.25, false);
+    __block BOOL tokenOk;
+    [apprienSdk CheckTokenValidity: ^(BOOL tokenIsValid) {
+            tokenOk = tokenIsValid;
+    }];
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    XCTAssertTrue(tokenOk);
 }
 
 //Test Apprien service

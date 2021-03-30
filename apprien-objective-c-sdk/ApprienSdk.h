@@ -127,7 +127,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Validates the supplied access token with the Apprien API
 */
-- (BOOL)CheckTokenValidity;
+- (void)CheckTokenValidity:(void (^)(BOOL tokenIsValid))callback;
 
 /*!
  @abstract Posts the receipt to Apprien for calculating new prices.
