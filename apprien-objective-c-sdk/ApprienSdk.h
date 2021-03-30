@@ -9,7 +9,7 @@
 @class ApprienProduct;//needed for getting apprien products in api calls.
 
 /*!
- @abstract Used to tell Apprien which shop to use.
+ @abstract Used to tell Apprien which store to use.
 */
 typedef enum ApprienIntegrationType : NSUInteger {
     GooglePlayStore = 0,
@@ -102,9 +102,8 @@ typedef enum ApprienIntegrationType : NSUInteger {
  @param apprienProducts array of products to be used as container.
  @param callback that is called when all product variant requests have completed. It returns array of apprienProducts
  that contain variant ids. From these can the prices be extracted.
- @return BOOL isDone is returned after the request has been completed.
  */
-- (BOOL)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback;
+- (void)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback;
 
 /*!
  @abstract Initializes a new instance of the ApprienManager
@@ -117,12 +116,12 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract  Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
 */
-- (BOOL)TestConnection;
+- (BOOL)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler;
 
 /*!
  @abstract Check whether Apprien API service is online.
 */
-- (BOOL)CheckServiceStatus;
+- (void)CheckServiceStatus: (void (^)(BOOL serviceOk))callback;
 
 /*!
  @abstract Validates the supplied access token with the Apprien API
@@ -134,12 +133,12 @@ typedef enum ApprienIntegrationType : NSUInteger {
  @discussion Uses REST_POST_RECEIPT_URL as address
  @param receiptJson NSString containing the receipt for the form to be posted.
 */
-+ (BOOL)PostReceipt:(NSString *)receiptJson;
+- (void)PostReceipt:(NSString *)receiptJson completionHandler: (void (^)())completionHandler;
 
 /*!
  @abstract Tell Apprien that these products were shown. NOTE: This is needed for Apprien to work correctly.
 */
-- (BOOL)ProductsShown:(NSArray<ApprienProduct *> *)apprienProducts;
+- (void)ProductsShown:(NSArray<ApprienProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler;
 
 /*!
  @abstract Parses the base IAP id from the Apprien response (variant IAP id)

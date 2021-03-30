@@ -141,13 +141,14 @@ NSArray <NSString *> *testIAPids;
 - (void)testFetchingManyProductsShouldSucceed {
 
     NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished=TRUE;
     }];
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.1, false);
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
@@ -165,12 +166,14 @@ NSArray <NSString *> *testIAPids;
     apprienSdk.REST_GET_ALL_PRICES_URL = [[@"http://localhost:" stringByAppendingString:@"123123"] stringByAppendingString:@"/api/v0/stores/google/games/{0}/products/{1}/prices"];
 
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished = TRUE;
     }];
+
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
@@ -185,12 +188,13 @@ NSArray <NSString *> *testIAPids;
 
     [apprienSdk setToken:@"badToken"];
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished = TRUE;
     }];
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
@@ -213,15 +217,17 @@ NSArray <NSString *> *testIAPids;
     apprienSdk.REQUEST_TIMEOUT = 0.0000000001f;
 
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished=TRUE;
     }];
 
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
+
     for (int i = 0; i < [products count]; i++) {
         ApprienProduct *product = products[i];
         ApprienProduct *expectedStringToBeFound = expectedVariantIdPart[i];
@@ -241,14 +247,15 @@ NSArray <NSString *> *testIAPids;
 
 
 size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
-
     return size * nmemb;
 }
 
-/*TODO:Ask how to to test this?
 - (void)testProductsShown {
-    BOOL isDone = [apprienSdk ProductsShown:products];
-    while (isDone == FALSE) {
+    __block BOOL postReceiptFinished;
+    [apprienSdk ProductsShown:products completionHandler:^(){
+        postReceiptFinished = TRUE;
+    }];
+    while (postReceiptFinished == FALSE) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
     }
 
@@ -259,7 +266,24 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         XCTAssertEqual(expectedIapId, resultId);
     }
 }
-*/
+
+- (void)testPostReceipt {
+    __block BOOL postReceiptFinished;
+    NSString *receipt = @"test receipt,  price: 402";
+    [apprienSdk PostReceipt:receipt completionHandler:^(){
+
+        postReceiptFinished = TRUE;
+    }];
+    while(postReceiptFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+    for (int i = 0; i < [products count]; i++) {
+        ApprienProduct *product = products[i];
+        NSString *expectedIapId = [testIAPids[i] stringByAppendingString:@"-variant"];
+        NSString *resultId = product.apprienVariantIAPId;
+        XCTAssertEqual(expectedIapId, resultId);
+    }
+}
 
 - (void)testGetBaseIAPId {
     NSString *baseIapId = [apprienSdk GetBaseIAPId:defaultIAPid];
@@ -272,35 +296,48 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 
 //Test against the real Apprien service. If these fail the server is most likely down.
 - (void)testConnection {
-    if ([apprienSdk TestConnection] == TRUE) {
-        //Connection to Apprien up
-        XCTAssertTrue(TRUE);
-    } else {
-        //Connection to Apprien down
-        XCTAssertTrue(FALSE);
+    __block BOOL testConnectionOk;
+    __block BOOL testConnectionFinished;
+    [apprienSdk TestConnection:^(BOOL statusCheck, BOOL tokenCheck) {
+        if(statusCheck && tokenCheck){
+            testConnectionOk = TRUE;
+        }
+        testConnectionFinished = TRUE;
+    }];
+
+    while(testConnectionFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
+
+    XCTAssertTrue(testConnectionOk);
 }
 
 - (void)testTokenValidity {
     __block BOOL tokenOk;
+    __block BOOL checkTokenFinished;
     [apprienSdk CheckTokenValidity: ^(BOOL tokenIsValid) {
             tokenOk = tokenIsValid;
+            checkTokenFinished = TRUE;
     }];
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    while(checkTokenFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+
     XCTAssertTrue(tokenOk);
 }
 
 //Test Apprien service
 - (void)testApprienServiceStatus {
-    
-    if ([apprienSdk CheckServiceStatus] == TRUE) {
-        //Success
-        XCTAssertTrue(TRUE);
-    } else {
-        //Fail
-        XCTAssertTrue(FALSE);
+    __block BOOL serviceOk;
+    __block BOOL serviceCheckFinished;
+    [apprienSdk CheckServiceStatus:^(BOOL serviceIsOk) {
+        serviceOk = serviceIsOk;
+        serviceCheckFinished = TRUE;
+    }];
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
+
+    XCTAssertTrue(serviceOk);
 }
 @end

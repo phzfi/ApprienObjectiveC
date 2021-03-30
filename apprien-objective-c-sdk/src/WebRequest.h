@@ -73,11 +73,13 @@ public:
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.
     /// </summary>
-    NSURLSessionUploadTask *Post(std::string url, std::list<FormDataSection> formSections);
+    NSURLSessionUploadTask *Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack);
 
     /// <summary>
     /// Create a WebRequest configured to send post data to a server via HTTP POST.
     /// </summary>
     NSURLSessionUploadTask *Post(std::string url, const char *postData = nullptr);
+
+    int HandleResponse(NSURLResponse *response, NSError *error) const;
 };
 

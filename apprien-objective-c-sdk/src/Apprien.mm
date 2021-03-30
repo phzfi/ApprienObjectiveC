@@ -59,9 +59,9 @@ void ApprienManager::SendError(int responseCode, std::string errorMessage) {
     request.SendWebRequest();
 }
 
-bool ApprienManager::CheckServiceStatus() {
+bool ApprienManager::CheckServiceStatus(std::function<void(int response, int errorCode)> callback) {
     auto request = WebRequest();
-    request.Get(REST_GET_APPRIEN_STATUS, std::function<void(int response, int errorCode)>());
+    request.Get(REST_GET_APPRIEN_STATUS, callback);
     request.SendWebRequest();
 
     if (request.responseCode != 0) {
@@ -70,19 +70,14 @@ bool ApprienManager::CheckServiceStatus() {
     return request.isDone;
 }
 
-
-
 void ApprienManager::CheckTokenValidity(std::function<void(int response, int errorCode)> callback) {
     char url[5000];
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_GET_VALIDATE_TOKEN_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
     
-    
     NSURLSessionDataTask *dataTask = request.Get(url, callback);
     request.SetRequestHeader("Authorization", "Bearer " + token);
     [dataTask resume];
-    
-   
 }
 
 std::vector<ApprienManager::ApprienProduct> Products;
@@ -140,7 +135,7 @@ WebRequest ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprie
     return request;
 }
 
-bool ApprienManager::PostReceipt(std::string receiptJson) {
+void ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
     auto formData = std::list<FormDataSection>();
     std::list<FormDataSection>::iterator it = formData.begin();
     formData.insert(it, FormDataSection("receipt", receiptJson.c_str()));
@@ -148,15 +143,14 @@ bool ApprienManager::PostReceipt(std::string receiptJson) {
     char url[5000];
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_POST_RECEIPT_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
-    request.Post(url, formData);
+    request.Post(url, formData, callback);
     request.SetRequestHeader("Authorization", "Bearer " + token);
     request.SendWebRequest();
 
 
-    return request.isDone;
 }
 
-bool ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts) {
+void ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int errorCode)> callback) {
     auto formData = std::list<FormDataSection>();
     std::list<FormDataSection>::iterator it = formData.begin();
     for (unsigned int i = 0; i < apprienProducts.size(); i++) {
@@ -168,14 +162,13 @@ bool ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts) 
     char url[5000];
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_POST_PRODUCTS_SHOWN_URL, StoreIdentifier().c_str());
-    request.Post(url, formData);
+    request.Post(url, formData, callback);
     request.SetRequestHeader("Authorization", "Bearer " + token);
     request.SendWebRequest();
 
     if (request.responseCode != 0) {
         SendError(request.responseCode, "Error occured while posting products shown: HTTP error: " + request.errorMessage);
     }
-    return request.isDone;
 }
 
 std::string ApprienManager::GetBaseIAPId(std::string storeIAPId) {
@@ -202,9 +195,29 @@ std::vector<ApprienManager::ApprienProduct> ApprienManager::ApprienProduct::From
     return apprienProducts;
 }
 
-bool ApprienManager::TestConnection(bool &statusCheck, bool &tokenCheck) {
-    // Check service status and validate the token
-  //  statusCheck = (CheckServiceStatus());
-//    tokenCheck = (CheckTokenValidity());
-    return statusCheck && tokenCheck;
+void ApprienManager::TestConnection(std::function<void(BOOL statusCheck, BOOL tokenCheck)> callback) {
+    // Checks service status and validates the token
+    CheckServiceStatus(^(int response, int error) {
+        if(error == 0 && response == 0){
+            CheckTokenValidity(^(int response, int error) {
+                callback = CompleteValidateServices(callback, response, error);
+            });
+        }
+        else{
+            //Service is down cannot check token
+            callback(false, false);
+        }
+    });
+}
+
+std::function<void(BOOL, BOOL)> &ApprienManager::CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const {
+    if(error == 0 && response == 0){
+        //Service and token ok
+        callback(true, true);
+    }
+    else{
+        //service up, but token is not valid
+        callback(true, false);
+    }
+    return const_cast<std::function<void(BOOL, BOOL)> &>(callback);
 }

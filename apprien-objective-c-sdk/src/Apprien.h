@@ -200,12 +200,12 @@ namespace Apprien {
         /// Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
         /// </summary>
         /// <param name="callback">The first parameter is true if Apprien is reachable. The second parameter is true if the provided token is valid</param>
-        bool TestConnection(bool &statusCheck, bool &tokenCheck);
+        void TestConnection(std::function<void(BOOL statusCheck, BOOL tokenCheck)> callback);
 
         /// <summary>
         /// Check whether Apprien API service is online.
         /// </summary>
-        bool CheckServiceStatus();
+        bool CheckServiceStatus(std::function<void(int response, int errorCode)> callback);
 
         /// <summary>
         /// Validates the supplied access token with the Apprien API
@@ -234,12 +234,12 @@ namespace Apprien {
         /// </para>
         /// </summary>
         /// <param name="receiptJson"></param>
-        bool PostReceipt(std::string receiptJson);
+        void PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback);
 
         /// <summary>
         /// Tell Apprien that these products were shown. NOTE: This is needed for Apprien to work correctly.
         /// </summary>
-        bool ProductsShown(std::vector<ApprienProduct> apprienProducts);
+        void ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int error)> callback );
 
         /// <summary>
         /// <para>
@@ -256,6 +256,8 @@ namespace Apprien {
         /// <param name="storeIapId">Apprien product IAP id on the Store (Google or Apple) e.g. z_pack2_gold.apprien_399_abcd</param>
         /// <returns>Returns the base IAP id for the given Apprien variant IAP id.</returns>
         std::string GetBaseIAPId(std::string storeIAPId);
+
+        std::function<void(BOOL, BOOL)> &CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const;
     };
 
 } // namespace Apprien

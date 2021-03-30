@@ -101,14 +101,21 @@ Apprien::ApprienManager *apprienManager;
                               encoding:[NSString defaultCStringEncoding]];
 }
 
-- (BOOL)TestConnection {
-    BOOL statusCheck;
-    BOOL tokenCheck;
-    return apprienManager->TestConnection(reinterpret_cast<bool &> (statusCheck), reinterpret_cast<bool &>(tokenCheck));
+- (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler {
+    apprienManager->TestConnection(^(BOOL statusCheck, BOOL tokenCheck){
+            completionHandler(statusCheck, tokenCheck);
+    });
 }
 
-- (BOOL)CheckServiceStatus {
-    return apprienManager->CheckServiceStatus();
+- (void)CheckServiceStatus: (void (^)(BOOL serviceOk))callback {
+     apprienManager->CheckServiceStatus(^(int response, int error) {
+         if(error == 0 && response == 0){
+             callback(true);
+         }
+         else{
+             callback(false);
+         }
+     });
 }
 
 - (void)CheckTokenValidity:(void (^)(BOOL tokenIsValid))callback {
@@ -122,24 +129,42 @@ Apprien::ApprienManager *apprienManager;
      });
 }
 
-- (BOOL)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
-    
-    __block BOOL isDone = FALSE;
-  
-        std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
-        
-        apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
-        
-        apprienManager->FetchApprienPrices(apprienProductsC, ^(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)
-        {
-            NSArray <ApprienProduct *> *apprienProductsAndPrices = [self CopyApprienProductsFromCPPToObjC:apprienProducts apprienProductsC:apprienProductsC];
-            
-            apprienManager->CatchAndSendRequestError();
-           
-            callback(apprienProductsAndPrices);
-            isDone = TRUE;
+- (void)PostReceipt:(NSString *)receiptJson completionHandler: (void (^)())completionHandler {
+
+    apprienManager->PostReceipt([receiptJson UTF8String], ^(int response, int error){
+        completionHandler();
+    });
+}
+
+- (void)ProductsShown:(NSArray *)apprienProducts: (void (^)())completionHandler {
+    @autoreleasepool {
+        std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsCPP;
+        [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsCPP];
+        apprienManager->ProductsShown(apprienProductsCPP, ^(int response, int error) {
+            completionHandler();
         });
-        return isDone;
+    }
+}
+
+- (NSString *)GetBaseIAPId:(NSString *)storeIapId {
+    return [NSString stringWithCString:apprienManager->GetBaseIAPId(storeIapId.UTF8String).c_str()
+                              encoding:[NSString defaultCStringEncoding]];
+}
+
+- (void)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
+
+    __block BOOL isDone = FALSE;
+    std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
+    apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
+
+    apprienManager->FetchApprienPrices(apprienProductsC, ^(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)
+    {
+        NSArray <ApprienProduct *> *apprienProductsAndPrices = [self CopyApprienProductsFromCPPToObjC:apprienProducts apprienProductsC:apprienProductsC];
+
+        apprienManager->CatchAndSendRequestError();
+
+        callback(apprienProductsAndPrices);
+    });
 }
 
 - (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
@@ -168,26 +193,6 @@ Apprien::ApprienManager *apprienManager;
         }
         return apprienProducts;
     }
-}
-
-+ (BOOL)PostReceipt:(NSString *)receiptJson {
-    return apprienManager->PostReceipt([receiptJson UTF8String]);
-}
-
-- (BOOL)ProductsShown:(NSArray *)apprienProducts {
-    @autoreleasepool {
-        int count = [apprienProducts count];
-        std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsCPP;
-        [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsCPP];
-
-        bool isDone = apprienManager->ProductsShown(apprienProductsCPP);
-        return isDone;
-    }
-}
-
-- (NSString *)GetBaseIAPId:(NSString *)storeIapId {
-    return [NSString stringWithCString:apprienManager->GetBaseIAPId(storeIapId.UTF8String).c_str()
-                              encoding:[NSString defaultCStringEncoding]];
 }
 
 @end
