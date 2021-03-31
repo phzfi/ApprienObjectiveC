@@ -137,6 +137,7 @@ NSURLSessionDataTask *WebRequest::Get(std::string url, std::function<void(int re
 
 NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack)
 {
+    Initialize(url, @"POST");
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];;
     
     for (auto item : formSections)

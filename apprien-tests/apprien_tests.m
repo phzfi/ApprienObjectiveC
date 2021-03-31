@@ -146,7 +146,7 @@ NSArray <NSString *> *testIAPids;
         products = productsWithPrices;
         fetchPricesFinished=TRUE;
     }];
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 1.1, false);
+
     //wait for async to complete
     while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
@@ -259,12 +259,9 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
     }
 
-    for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
-        NSString *expectedIapId = [testIAPids[i] stringByAppendingString:@"-variant"];
-        NSString *resultId = product.apprienVariantIAPId;
-        XCTAssertEqual(expectedIapId, resultId);
-    }
+
+    XCTAssertEqual(postReceiptFinished, TRUE);
+    
 }
 
 - (void)testPostReceipt {
