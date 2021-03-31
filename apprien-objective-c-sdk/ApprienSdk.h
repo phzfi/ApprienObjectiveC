@@ -116,7 +116,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract  Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
 */
-- (BOOL)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler;
+- (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler;
 
 /*!
  @abstract Check whether Apprien API service is online.

@@ -257,7 +257,7 @@ namespace Apprien {
         /// <returns>Returns the base IAP id for the given Apprien variant IAP id.</returns>
         std::string GetBaseIAPId(std::string storeIAPId);
 
-        std::function<void(BOOL, BOOL)> &CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const;
+        void CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const;
     };
 
 } // namespace Apprien

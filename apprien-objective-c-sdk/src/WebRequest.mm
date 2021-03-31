@@ -129,7 +129,7 @@ NSURLSessionDataTask *WebRequest::Get(std::string url, std::function<void(int re
     
     dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         int responseCode = HandleResponse(response, error);
-        callBack(responseCode, (long)error.code);
+        callBack(responseCode, (int)error.code);
     }];
   
     return dataTask;
@@ -151,7 +151,7 @@ NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSect
     if (!error) {
         uploadTask = [session uploadTaskWithRequest:request fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
             int responseCode = HandleResponse(response, error);
-            callBack(responseCode, (long)error.code);
+            callBack(responseCode, (int)error.code);
         }];
     }
     return uploadTask;
@@ -173,8 +173,6 @@ NSURLSessionUploadTask *WebRequest::Post(std::string url, const char *postData)
 {
     NSString *str = [NSString stringWithCString: postData encoding:NSString.defaultCStringEncoding ];
     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSError *error = nil;
 
     uploadTask = [session uploadTaskWithRequest:request
                     fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {

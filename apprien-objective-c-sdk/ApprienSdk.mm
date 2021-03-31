@@ -136,7 +136,7 @@ Apprien::ApprienManager *apprienManager;
     });
 }
 
-- (void)ProductsShown:(NSArray *)apprienProducts: (void (^)())completionHandler {
+- (void)ProductsShown:(NSArray<ApprienProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler{
     @autoreleasepool {
         std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsCPP;
         [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsCPP];
@@ -152,8 +152,6 @@ Apprien::ApprienManager *apprienManager;
 }
 
 - (void)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
-
-    __block BOOL isDone = FALSE;
     std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
     apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
 

@@ -200,7 +200,7 @@ void ApprienManager::TestConnection(std::function<void(BOOL statusCheck, BOOL to
     CheckServiceStatus(^(int response, int error) {
         if(error == 0 && response == 0){
             CheckTokenValidity(^(int response, int error) {
-                callback = CompleteValidateServices(callback, response, error);
+                CompleteValidateServices(callback, response, error);
             });
         }
         else{
@@ -210,7 +210,7 @@ void ApprienManager::TestConnection(std::function<void(BOOL statusCheck, BOOL to
     });
 }
 
-std::function<void(BOOL, BOOL)> &ApprienManager::CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const {
+void ApprienManager::CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const {
     if(error == 0 && response == 0){
         //Service and token ok
         callback(true, true);
@@ -219,5 +219,4 @@ std::function<void(BOOL, BOOL)> &ApprienManager::CompleteValidateServices(const 
         //service up, but token is not valid
         callback(true, false);
     }
-    return const_cast<std::function<void(BOOL, BOOL)> &>(callback);
 }
