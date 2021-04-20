@@ -98,14 +98,15 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
 bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
 {
     if(dataTask){
-        [dataTask resume]; //send the HTTP request
         OnWebRequest = callback;
+        [dataTask resume]; //send the HTTP request
+
         return true;
     }
     if(uploadTask){
-
-        [uploadTask resume];//send the HTTP request
         OnWebRequest = callback;
+        [uploadTask resume];//send the HTTP request
+ 
         return true;
     }
 

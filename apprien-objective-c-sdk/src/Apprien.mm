@@ -76,7 +76,7 @@ void ApprienManager::CheckTokenValidity(std::function<void(int response, int err
     snprintf(url, sizeof(url), REST_GET_VALIDATE_TOKEN_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
     
     NSURLSessionDataTask *dataTask = request.Get(url, callback);
-    request.SetRequestHeader("Authorization", "Bearer " + token);
+    request.SetRequestHeader("Authorization: ", "Bearer " + token);
     [dataTask resume];
 }
 
@@ -115,6 +115,11 @@ void FetchPrices(char *data) {
     }
 
     delete (productLookup);
+}
+std::string ApprienManager::BuildUrl(){
+    char url[5000];
+    snprintf(url, sizeof(url), REST_GET_ALL_PRICES_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
+    return url;
 }
 
 WebRequest ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback) {

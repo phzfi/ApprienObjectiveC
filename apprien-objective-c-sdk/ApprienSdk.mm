@@ -15,7 +15,7 @@
 @synthesize REQUEST_TIMEOUT;
 @synthesize REST_GET_PRICE_URL;
 @synthesize REST_GET_ALL_PRICES_URL;
-
+NSURLSession *sessionWithoutADelegate;
 Apprien::ApprienManager *apprienManager;
 
 - (void)ApprienManager:(NSString *)gamePackageName integrationType:(int)integrationType token:(NSString *)token {
@@ -152,17 +152,37 @@ Apprien::ApprienManager *apprienManager;
 }
 
 - (void)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
+   
+    if(sessionWithoutADelegate == nil){
+        NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+
+        sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
+    }
+    
     std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
     apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
+    
+    NSString *urlString = [self REST_GET_PRICE_URL];
+    NSString *token = [self token];
+    
+    urlString = [NSString stringWithCString:apprienManager->BuildUrl().c_str() encoding:NSUTF8StringEncoding];
 
-    apprienManager->FetchApprienPrices(apprienProductsC, ^(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)
-    {
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+       [request setURL:[NSURL URLWithString:urlString]];
+       [request setHTTPMethod:@"GET"];
+    NSString *headerValue =[@"Bearer:" stringByAppendingString:token];
+
+    [request addValue:headerValue forHTTPHeaderField:@"Authorization "];
+    [request addValue:[self ApprienIdentifier] forHTTPHeaderField:@"Session-Id"];
+    
+    [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"Got response %@ with error %@.\n", response, error);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         NSArray <ApprienProduct *> *apprienProductsAndPrices = [self CopyApprienProductsFromCPPToObjC:apprienProducts apprienProductsC:apprienProductsC];
 
-        apprienManager->CatchAndSendRequestError();
-
         callback(apprienProductsAndPrices);
-    });
+    }] resume];
 }
 
 - (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {

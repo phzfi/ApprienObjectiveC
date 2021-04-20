@@ -137,27 +137,27 @@ namespace Apprien {
         /// <summary>
         /// Apprien REST API endpoint for testing the validity of the given token
         /// </summary>
-        const char *REST_GET_VALIDATE_TOKEN_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/auth";
+        const char *REST_GET_VALIDATE_TOKEN_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
 
         /// <summary>
         /// Apprien REST API endpoint for fetching all optimum product variants
         /// </summary>
-        const char *REST_GET_ALL_PRICES_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/prices";
+        const char *REST_GET_ALL_PRICES_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
 
         /// <summary>
         /// Apprien REST API endpoint for fetching the optimum product variant for a single product
         /// </summary>
-        const char *REST_GET_PRICE_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
+        const char *REST_GET_PRICE_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
         /// </summary>
-        const char *REST_POST_RECEIPT_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
+        const char *REST_POST_RECEIPT_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
         /// </summary>
-        const char *REST_POST_ERROR_URL = "https://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
+        const char *REST_POST_ERROR_URL = "http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing a notice to Apprien that product was shown.
@@ -224,7 +224,9 @@ namespace Apprien {
         /// </summary>
         /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
         WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
-
+        
+        std::string  BuildUrl();
+        
         /// <summary>
         /// <para>
         /// Posts the receipt to Apprien for calculating new prices.
