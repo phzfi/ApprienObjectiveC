@@ -437,6 +437,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -459,6 +460,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -471,6 +473,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "apprien-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -492,6 +495,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "apprien-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

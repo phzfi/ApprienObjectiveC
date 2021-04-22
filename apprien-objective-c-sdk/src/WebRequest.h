@@ -36,21 +36,6 @@ public:
 
     
     /// <summary>
-    /// Set verbose mode on/off.
-    /// </summary>
-    static int CURL_VERBOSE;
-
-    /// <summary>
-    /// Switch on/off the progress meter.
-    /// </summary>
-    static int CURL_NOPROGRESS;
-
-    /// <summary>
-    /// Verify the peer's SSL certificate.
-    /// </summary>
-    static int CURL_VERIFYPEER;
-
-    /// <summary>
     /// Certificate Authority bundle file.
     /// </summary>
     const char *CURL_CA_BUNDLE = "curl-ca-bundle.crt";

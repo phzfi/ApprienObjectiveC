@@ -195,7 +195,9 @@ namespace Apprien {
             this->integrationType = integrationType;
             this->token = token;
         }
-
+        
+        std::vector<ApprienManager::ApprienProduct> GetProducts(char *data);
+        
         /// <summary>
         /// Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
         /// </summary>
@@ -211,7 +213,9 @@ namespace Apprien {
         /// Validates the supplied access token with the Apprien API
         /// </summary>
         void CheckTokenValidity(std::function<void(int response, int errorCode)> callback);
+        
 
+        
         /// <summary>
         /// <para>
         /// Fetch all Apprien variant IAP ids with optimum prices.
@@ -225,7 +229,7 @@ namespace Apprien {
         /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
         WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
         
-        std::string  BuildUrl();
+        std::string BuildUrl();
         
         /// <summary>
         /// <para>

@@ -74,6 +74,8 @@ typedef enum ApprienIntegrationType : NSUInteger {
 */
 - (NSString *)REST_POST_RECEIPT_URL;
 
+- (NSArray<ApprienProduct*> *)CopyApprienProductsFromData: data: (NSData *) data;
+
 /*!
  @abstract Apprien REST API endpoint for POSTing the receipt json for successful transactions
 */

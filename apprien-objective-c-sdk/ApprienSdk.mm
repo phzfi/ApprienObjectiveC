@@ -159,19 +159,11 @@ Apprien::ApprienManager *apprienManager;
         sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
     }
     
-    std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC;
-    apprienProductsC = [self CopyApprienProductsFromObjCToCPP:apprienProducts apprienProductsC:apprienProductsC];
-    
-    NSString *urlString = [self REST_GET_PRICE_URL];
-    NSString *token = [self token];
-    
-    urlString = [NSString stringWithCString:apprienManager->BuildUrl().c_str() encoding:NSUTF8StringEncoding];
-
-    
+    NSString *urlString = [NSString stringWithCString:apprienManager->BuildUrl().c_str() encoding:NSUTF8StringEncoding];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
        [request setURL:[NSURL URLWithString:urlString]];
        [request setHTTPMethod:@"GET"];
-    NSString *headerValue =[@"Bearer:" stringByAppendingString:token];
+    NSString *headerValue =[@"Bearer:" stringByAppendingString:[self token]];
 
     [request addValue:headerValue forHTTPHeaderField:@"Authorization "];
     [request addValue:[self ApprienIdentifier] forHTTPHeaderField:@"Session-Id"];
@@ -179,10 +171,30 @@ Apprien::ApprienManager *apprienManager;
     [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@"Got response %@ with error %@.\n", response, error);
         NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        NSArray <ApprienProduct *> *apprienProductsAndPrices = [self CopyApprienProductsFromCPPToObjC:apprienProducts apprienProductsC:apprienProductsC];
-
-        callback(apprienProductsAndPrices);
+        
+        if(error){
+           //TODO: handle error sending
+        }
+        
+        NSMutableArray<ApprienProduct*> *apprienProductsOut = [self CopyApprienProductsFromData:data];
+        if([apprienProductsOut count] == 0){
+            callback(apprienProductsOut);
+        }
+        else{
+            callback(apprienProducts);
+        }
     }] resume];
+
+}
+
+- (NSMutableArray<ApprienProduct*> *)CopyApprienProductsFromData: (NSData *) data{
+    @autoreleasepool {
+        NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        char *dataIn =const_cast<char *>(dataString.UTF8String);
+        std::vector<Apprien::ApprienManager::ApprienProduct> products = apprienManager->GetProducts(dataIn);
+        
+        return [self CopyApprienProductsFromCPPToObjC:products];
+    }
 }
 
 - (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
@@ -200,14 +212,16 @@ Apprien::ApprienManager *apprienManager;
     }
 }
 
-- (NSArray *)CopyApprienProductsFromCPPToObjC:(NSArray *)apprienProducts apprienProductsC:(const std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
+- (NSMutableArray *)CopyApprienProductsFromCPPToObjC:(const std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
     @autoreleasepool {
-        int size = (int) [apprienProducts count];
+        int size = (int)sizeof(apprienProductsC)/sizeof(apprienProductsC[0]);
+        NSMutableArray<ApprienProduct*> *apprienProducts = [[NSMutableArray<ApprienProduct*> alloc]init];
         for (int i = 0; i < size; i++) {
-            ApprienProduct *product = [apprienProducts objectAtIndex:i];
+            ApprienProduct *product =  [[ApprienProduct alloc]init];
             product.store = [NSString stringWithCString:apprienProductsC[i].store.c_str() encoding:[NSString defaultCStringEncoding]];
             product.baseIAPId = [NSString stringWithCString:apprienProductsC[i].baseIAPId.c_str() encoding:[NSString defaultCStringEncoding]];
             product.apprienVariantIAPId = [NSString stringWithCString:apprienProductsC[i].apprienVariantIAPId.c_str() encoding:[NSString defaultCStringEncoding]];
+            [apprienProducts addObject:product];
         }
         return apprienProducts;
     }

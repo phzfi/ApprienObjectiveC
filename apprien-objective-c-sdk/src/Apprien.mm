@@ -13,6 +13,13 @@ public:
     std::string variant;
 };
 
+
+int responseCode;
+std::string responseErrorMessage;
+std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> OnFetchPrices;
+int requestResponseCode;
+std::string httpErrorMessage;
+
 void from_json(const json &j, ApprienProductListProduct &sb) {
     sb.base = j["base"].get<std::string>();
     sb.variant = j["variant"].get<std::string>();
@@ -25,9 +32,6 @@ class ApprienProductList {
 public:
     std::list<ApprienProductListProduct> products;
 };
-
-int requestResponseCode;
-std::string httpErrorMessage;
 
 void SendError(int code, std::basic_string<char, std::char_traits<char>, std::allocator<char>> basicString);
 
@@ -80,64 +84,10 @@ void ApprienManager::CheckTokenValidity(std::function<void(int response, int err
     [dataTask resume];
 }
 
-std::vector<ApprienManager::ApprienProduct> Products;
-int responseCode;
-std::string responseErrorMessage;
-
-std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> OnFetchPrices;
-
-
-
-/// <summary>
-/// Parse the JSON data and update the variant IAP ids.
-/// </summary>
-void FetchPrices(char *data) {
-    auto productLookup = new std::map<std::string, ApprienManager::ApprienProduct>();
-    try {
-        json j = json::parse(data);
-        ApprienProductList productList = j;
-        for (ApprienProductListProduct product : productList.products) {
-            for (int i = 0; i < Products.size(); i++) {
-                if (product.base == Products[i].baseIAPId) {
-                    Products[i].baseIAPId = product.base;
-                    Products[i].apprienVariantIAPId = product.variant;
-                }
-            }
-        }
-    }
-    catch (const std::exception &e) // If the JSON cannot be parsed, products will be using default IAP ids*/
-    {
-        std::cout << e.what();
-    }
-
-    if (OnFetchPrices != nullptr) {
-        OnFetchPrices(Products);
-    }
-
-    delete (productLookup);
-}
 std::string ApprienManager::BuildUrl(){
     char url[5000];
     snprintf(url, sizeof(url), REST_GET_ALL_PRICES_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
     return url;
-}
-
-WebRequest ApprienManager::FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback) {
-    char url[5000];
-    OnFetchPrices = callback;
-    Products = apprienProducts;
-    auto request = WebRequest();
-    snprintf(url, sizeof(url), REST_GET_ALL_PRICES_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
-    request.Get(url, std::function<void(int reponse, int errorCode)>());
-    request.SetRequestHeader("Authorization", "Bearer " + token);
-    request.SetRequestHeader("Session-Id", ApprienIdentifier());
-    request.SendWebRequest(FetchPrices);
-
-    responseCode = request.responseCode;
-    responseErrorMessage = request.errorMessage;
-    apprienProducts = Products;
-
-    return request;
 }
 
 void ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
@@ -198,6 +148,32 @@ std::vector<ApprienManager::ApprienProduct> ApprienManager::ApprienProduct::From
         apprienProducts.push_back(ApprienProduct(product));
     }
     return apprienProducts;
+}
+/// <summary>
+/// Parse the JSON data and update the variant IAP ids.
+/// </summary>
+std::vector<ApprienManager::ApprienProduct> ApprienManager::GetProducts(char *data) {
+    std::vector<ApprienManager::ApprienProduct> products;
+    auto productLookup = new std::map<std::string, ApprienManager::ApprienProduct>();
+    try {
+        json j = json::parse(data);
+        ApprienProductList productList = j;
+        for (ApprienProductListProduct product : productList.products) {
+            for (int i = 0; i < products.size(); i++) {
+                if (product.base == products[i].baseIAPId) {
+                    products[i].baseIAPId = product.base;
+                    products[i].apprienVariantIAPId = product.variant;
+                }
+            }
+        }
+    }
+    catch (const std::exception &e) // If the JSON cannot be parsed, products will be using default IAP ids*/
+    {
+        std::cout << e.what();
+    }
+
+    delete (productLookup);
+    return products;
 }
 
 void ApprienManager::TestConnection(std::function<void(BOOL statusCheck, BOOL tokenCheck)> callback) {
