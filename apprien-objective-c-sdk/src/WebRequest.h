@@ -16,7 +16,7 @@ private:
 
     struct curl_slist *chunk = NULL;
 
-    bool Initialize(std::string url, NSString* httpMethod);
+    NSMutableURLRequest *Initialize(std::string url, NSString* httpMethod);
 
 public:
     /// <summary>
@@ -34,7 +34,11 @@ public:
     /// </summary>
     std::string errorMessage = "";
 
-    
+    /// <summary>
+    /// Get session.
+    /// </summary>
+    NSURLSession *GetSession();
+
     /// <summary>
     /// Certificate Authority bundle file.
     /// </summary>
@@ -53,7 +57,7 @@ public:
     /// <summary>
     /// Create a WebRequest for HTTP GET.
     /// </summary>
-    NSURLSessionDataTask *Get(std::string url, std::function<void(int response, int error)> callBack);
+    NSMutableURLRequest *Get(std::string url);
 
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.

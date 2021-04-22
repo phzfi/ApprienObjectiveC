@@ -32,17 +32,14 @@ inline bool FileExists(const std::string &name)
     return f.good();
 }
 
-int WebRequest::CURL_VERBOSE = 0;
-int WebRequest::CURL_NOPROGRESS = 1;
-int WebRequest::CURL_VERIFYPEER = 1;
 NSMutableURLRequest *request;
 NSURLSession *session;
 NSURLSessionDataTask *dataTask;
 NSURLSessionUploadTask *uploadTask;
 
-bool WebRequest::Initialize(std::string url, NSString* httpMethod)
+NSMutableURLRequest *WebRequest::Initialize(std::string url, NSString* httpMethod)
 {
-    auto certFile = WorkingDir() + Separator() + CURL_CA_BUNDLE;
+   // auto certFile = WorkingDir() + Separator() + CURL_CA_BUNDLE;
     if(session == nil){
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         session = [NSURLSession sessionWithConfiguration:config];
@@ -52,15 +49,8 @@ bool WebRequest::Initialize(std::string url, NSString* httpMethod)
     request = [[NSMutableURLRequest alloc] initWithURL:nsurl];
     request.HTTPMethod = httpMethod;
     
-    return true;
+    return request;
 }
-
-/*
-  1. Adhere to the NSURLSessionDelegate delegate
-  2. Initialize NSURLSession and specify self as delegate (e.g. [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:self delegateQueue: [NSOperationQueue mainQueue]];)
-  3. Add the method below to your class
-  4. Change the certificate resource name
-*/
  
  void URLSession(NSURLSession * session, NSURLAuthenticationChallenge *challenge, NSString *path, std::function<void(NSURLSessionAuthChallengeDisposition, NSURLCredential *)> completionHandler )
 {
@@ -124,16 +114,13 @@ void WebRequest::SetRequestHeader(std::string name, std::string  value)
     [request addValue:headerValue forHTTPHeaderField:headerName];
 }
 
-NSURLSessionDataTask *WebRequest::Get(std::string url, std::function<void(int response, int errorCode)> callBack)
+NSMutableURLRequest *WebRequest::Get(std::string url)
 {
-    Initialize(url, @"GET");
-    
-    dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        int responseCode = HandleResponse(response, error);
-        callBack(responseCode, (int)error.code);
-    }];
-  
-    return dataTask;
+    return Initialize(url, @"GET");
+}
+
+NSURLSession *WebRequest::GetSession(){
+    return session;
 }
 
 NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack)
@@ -163,7 +150,7 @@ int WebRequest::HandleResponse(NSURLResponse *response, NSError *error) const {/
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response; //must do type cast to get accss to statusCode etc
     int responseCode = (int)httpResponse.statusCode;
     NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
-    if (responseCode != 0) {
+    if (responseCode != 200 || error.code != 0) {
         //SendError(request.responseCode, "Error occurred while checking token validity: HTTP error: " + request.errorMessage);
         NSLog(@"Response code is: %d", responseCode);
         NSLog(@"Error message is:  %@", errorMessage);

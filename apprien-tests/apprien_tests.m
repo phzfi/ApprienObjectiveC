@@ -142,8 +142,10 @@ NSArray <NSString *> *testIAPids;
 
     NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
     __block BOOL fetchPricesFinished;
+    apprienSdk.DEBUGGING_ENABLED = TRUE;
+    __block NSArray * productsOut = [[NSArray alloc] init];
     [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
-        products = productsWithPrices;
+        productsOut = productsWithPrices;
         fetchPricesFinished=TRUE;
     }];
 
@@ -152,8 +154,8 @@ NSArray <NSString *> *testIAPids;
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
-    for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
+    for (int i = 0; i < [productsOut count]; i++) {
+        ApprienProduct *product = productsOut[i];
         NSString *expectedStringToBeFound = expectedVariantIdPart[i];
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([product.apprienVariantIAPId rangeOfString:expectedStringToBeFound].location != NSNotFound);
@@ -338,7 +340,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
     XCTAssertTrue(serviceOk);
 }
 //Test Apprien service
-- (void)testApprienServiceStatusPlainRequest {
+- (void)testPlainRequest {
     __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -375,7 +377,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
      
     [[sessionWithoutADelegate dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@"Got response %@ with error %@.\n", response, error);
-        //NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }] resume];
     while(serviceCheckFinished == FALSE){
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);

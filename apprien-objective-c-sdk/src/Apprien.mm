@@ -63,30 +63,11 @@ void ApprienManager::SendError(int responseCode, std::string errorMessage) {
     request.SendWebRequest();
 }
 
-bool ApprienManager::CheckServiceStatus(std::function<void(int response, int errorCode)> callback) {
-    auto request = WebRequest();
-    request.Get(REST_GET_APPRIEN_STATUS, callback);
-    request.SendWebRequest();
 
-    if (request.responseCode != 0) {
-        SendError(request.responseCode, "Error occured while posting products shown: HTTP error: " + request.errorMessage);
-    }
-    return request.isDone;
-}
 
-void ApprienManager::CheckTokenValidity(std::function<void(int response, int errorCode)> callback) {
+std::string ApprienManager::BuildUrl(const char* address){
     char url[5000];
-    auto request = WebRequest();
-    snprintf(url, sizeof(url), REST_GET_VALIDATE_TOKEN_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
-    
-    NSURLSessionDataTask *dataTask = request.Get(url, callback);
-    request.SetRequestHeader("Authorization: ", "Bearer " + token);
-    [dataTask resume];
-}
-
-std::string ApprienManager::BuildUrl(){
-    char url[5000];
-    snprintf(url, sizeof(url), REST_GET_ALL_PRICES_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
+    snprintf(url, sizeof(url), address, StoreIdentifier().c_str(), gamePackageName.c_str());
     return url;
 }
 
@@ -176,20 +157,6 @@ std::vector<ApprienManager::ApprienProduct> ApprienManager::GetProducts(char *da
     return products;
 }
 
-void ApprienManager::TestConnection(std::function<void(BOOL statusCheck, BOOL tokenCheck)> callback) {
-    // Checks service status and validates the token
-    CheckServiceStatus(^(int response, int error) {
-        if(error == 0 && response == 0){
-            CheckTokenValidity(^(int response, int error) {
-                CompleteValidateServices(callback, response, error);
-            });
-        }
-        else{
-            //Service is down cannot check token
-            callback(false, false);
-        }
-    });
-}
 
 void ApprienManager::CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const {
     if(error == 0 && response == 0){

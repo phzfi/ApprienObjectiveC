@@ -45,6 +45,11 @@ typedef enum ApprienIntegrationType : NSUInteger {
 - (int)integrationType;
 
 /*!
+ @abstract Logs raw information about request results
+*/
+@property(nonatomic) BOOL DEBUGGING_ENABLED;
+
+/*!
  @abstract Request timeout in seconds
 */
 @property(nonatomic) int REQUEST_TIMEOUT;

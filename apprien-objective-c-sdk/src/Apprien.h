@@ -199,22 +199,9 @@ namespace Apprien {
         std::vector<ApprienManager::ApprienProduct> GetProducts(char *data);
         
         /// <summary>
-        /// Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
-        /// </summary>
-        /// <param name="callback">The first parameter is true if Apprien is reachable. The second parameter is true if the provided token is valid</param>
-        void TestConnection(std::function<void(BOOL statusCheck, BOOL tokenCheck)> callback);
-
-        /// <summary>
-        /// Check whether Apprien API service is online.
-        /// </summary>
-        bool CheckServiceStatus(std::function<void(int response, int errorCode)> callback);
-
-        /// <summary>
         /// Validates the supplied access token with the Apprien API
         /// </summary>
         void CheckTokenValidity(std::function<void(int response, int errorCode)> callback);
-        
-
         
         /// <summary>
         /// <para>
@@ -229,7 +216,7 @@ namespace Apprien {
         /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
         WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
         
-        std::string BuildUrl();
+        std::string BuildUrl(const char *address);
         
         /// <summary>
         /// <para>

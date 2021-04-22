@@ -10,7 +10,7 @@
 #import "ApprienProduct.h"
 
 @implementation ApprienSdk : NSObject
-
+@synthesize DEBUGGING_ENABLED;
 @synthesize token;
 @synthesize REQUEST_TIMEOUT;
 @synthesize REST_GET_PRICE_URL;
@@ -102,31 +102,51 @@ Apprien::ApprienManager *apprienManager;
 }
 
 - (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler {
-    apprienManager->TestConnection(^(BOOL statusCheck, BOOL tokenCheck){
-            completionHandler(statusCheck, tokenCheck);
-    });
+
 }
 
 - (void)CheckServiceStatus: (void (^)(BOOL serviceOk))callback {
-     apprienManager->CheckServiceStatus(^(int response, int error) {
-         if(error == 0 && response == 0){
-             callback(true);
-         }
-         else{
-             callback(false);
-         }
-     });
+    auto request = WebRequest();
+    NSMutableURLRequest * requestTask = request.Get(apprienManager->REST_GET_APPRIEN_STATUS);
+
+    [[request.GetSession() dataTaskWithRequest:requestTask completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if([self DEBUGGING_ENABLED]){
+            NSLog(@"Got response %@ with error %@.\n", response, error);
+            NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+
+        if(request.HandleResponse(response, error) == 200){
+            callback(true);
+        }
+        else{
+            callback(false);
+        }
+    }] resume];
 }
 
 - (void)CheckTokenValidity:(void (^)(BOOL tokenIsValid))callback {
-     apprienManager->CheckTokenValidity(^(int response, int error){
-         if(error == 0 && response == 0){
-             callback(true);
-         }
-         else{
-             callback(false);
-         }
-     });
+
+    auto request = WebRequest();
+    NSMutableURLRequest * requestTask = request.Get(apprienManager->BuildUrl(apprienManager->REST_GET_VALIDATE_TOKEN_URL));
+    const char *headerValue =[[@"Bearer:" stringByAppendingString:[self token]] cStringUsingEncoding:NSUTF8StringEncoding];
+    request.SetRequestHeader("Authorization " , headerValue);
+    request.SetRequestHeader("Session-Id", [[self ApprienIdentifier] cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+    [[request.GetSession() dataTaskWithRequest:requestTask completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if([self DEBUGGING_ENABLED]){
+            NSLog(@"Got response %@ with error %@.\n", response, error);
+            NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+
+        if(request.HandleResponse(response, error) == 200){
+            callback(true);
+        }
+        else{
+            callback(false);
+        }
+    }] resume];
 }
 
 - (void)PostReceipt:(NSString *)receiptJson completionHandler: (void (^)())completionHandler {
@@ -153,38 +173,32 @@ Apprien::ApprienManager *apprienManager;
 
 - (void)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
    
-    if(sessionWithoutADelegate == nil){
-        NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-
-        sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
-    }
+    auto request = WebRequest();
     
-    NSString *urlString = [NSString stringWithCString:apprienManager->BuildUrl().c_str() encoding:NSUTF8StringEncoding];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-       [request setURL:[NSURL URLWithString:urlString]];
-       [request setHTTPMethod:@"GET"];
-    NSString *headerValue =[@"Bearer:" stringByAppendingString:[self token]];
-
-    [request addValue:headerValue forHTTPHeaderField:@"Authorization "];
-    [request addValue:[self ApprienIdentifier] forHTTPHeaderField:@"Session-Id"];
-    
-    [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(@"Got response %@ with error %@.\n", response, error);
-        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSMutableURLRequest * requestTask = request.Get(apprienManager->BuildUrl(apprienManager->REST_GET_APPRIEN_STATUS));
+   
+    const char *headerValue =[[@"Bearer:" stringByAppendingString:[self token]] cStringUsingEncoding:NSUTF8StringEncoding];
+    request.SetRequestHeader("Authorization " , headerValue);
+    request.SetRequestHeader("Session-Id", [[self ApprienIdentifier] cStringUsingEncoding:NSUTF8StringEncoding]);
+    [[request.GetSession() dataTaskWithRequest:requestTask completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
+        if([self DEBUGGING_ENABLED]){
+            NSLog(@"Got response %@ with error %@.\n", response, error);
+            NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+
         if(error){
            //TODO: handle error sending
         }
         
         NSMutableArray<ApprienProduct*> *apprienProductsOut = [self CopyApprienProductsFromData:data];
         if([apprienProductsOut count] == 0){
-            callback(apprienProductsOut);
-        }
-        else{
             callback(apprienProducts);
         }
+        else{
+            callback(apprienProductsOut);
+        }
     }] resume];
-
 }
 
 - (NSMutableArray<ApprienProduct*> *)CopyApprienProductsFromData: (NSData *) data{
