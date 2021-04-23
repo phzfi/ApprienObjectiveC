@@ -344,7 +344,6 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 
 //Test Apprien service
 - (void)testPlainRequest {
-    __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
        [request setURL:[NSURL URLWithString:@"https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"]];
@@ -365,12 +364,11 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
 
-    XCTAssertTrue(serviceOk);
+    XCTAssertTrue(serviceCheckFinished);
 }
 
 //Test Apprien service
 - (void)testApprienServiceStatusPlainRequest2 {
-    __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
 
     NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -387,11 +385,10 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
 
-    XCTAssertTrue(serviceOk);
+    XCTAssertTrue(serviceCheckFinished);
 }
 
 - (void)testApprienServiceStatusPlainRequest3 {
-    __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
 
     NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -414,7 +411,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
 
-    XCTAssertTrue(serviceOk);
+    XCTAssertTrue(serviceCheckFinished);
 }
 
 - (void)testApprienServiceStatusPlainRequest4 {
@@ -440,6 +437,6 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
 
-    XCTAssertTrue(serviceOk);
+    XCTAssertTrue(serviceCheckFinished);
 }
 @end

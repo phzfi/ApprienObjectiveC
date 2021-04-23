@@ -146,7 +146,7 @@ Apprien::ApprienManager *apprienManager;
             NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
 
-        if(request.HandleResponse(response, error) == 200){
+        if(request.HandleResponse(response, error) == 0){
             callback(true);
         }
         else{
