@@ -101,8 +101,14 @@ Apprien::ApprienManager *apprienManager;
                               encoding:[NSString defaultCStringEncoding]];
 }
 
-- (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))completionHandler {
+- (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))callback {
 
+    [self CheckServiceStatus:^(BOOL serviceIsOk) {
+
+        [self CheckTokenValidity: ^(BOOL tokenIsValid) {
+            callback(serviceIsOk, tokenIsValid);
+        }];
+    }];
 }
 
 - (void)CheckServiceStatus: (void (^)(BOOL serviceOk))callback {
@@ -129,8 +135,8 @@ Apprien::ApprienManager *apprienManager;
 
     auto request = WebRequest();
     NSMutableURLRequest * requestTask = request.Get(apprienManager->BuildUrl(apprienManager->REST_GET_VALIDATE_TOKEN_URL));
-    const char *headerValue =[[@"Bearer:" stringByAppendingString:[self token]] cStringUsingEncoding:NSUTF8StringEncoding];
-    request.SetRequestHeader("Authorization " , headerValue);
+    const char *headerValue =[[@"Bearer: " stringByAppendingString:[self token]] cStringUsingEncoding:NSUTF8StringEncoding];
+    request.SetRequestHeader("Authorization" , headerValue);
     request.SetRequestHeader("Session-Id", [[self ApprienIdentifier] cStringUsingEncoding:NSUTF8StringEncoding]);
     
     [[request.GetSession() dataTaskWithRequest:requestTask completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

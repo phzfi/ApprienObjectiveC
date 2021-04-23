@@ -36,7 +36,9 @@ NSArray <NSString *> *testIAPids;
 
     apprienSdk = [[ApprienSdk alloc] init];
     [apprienSdk ApprienManager:testPackageName integrationType:GooglePlayStore token:[token stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""]];
+        
     }
+    apprienSdk.DEBUGGING_ENABLED = TRUE;
 }
 
 - (void)tearDown {
@@ -84,7 +86,7 @@ NSArray <NSString *> *testIAPids;
 //Quick test to check that the api returns nstrings and they have base url in it.
 - (void)testApprienReturnUrls {
     @autoreleasepool {
-        NSString *baseUrl = @"https://";
+        NSString *baseUrl = @"http://";
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([[apprienSdk REST_GET_ALL_PRICES_URL] rangeOfString:baseUrl].location != NSNotFound);
         XCTAssertTrue([[apprienSdk REST_GET_PRICE_URL] rangeOfString:baseUrl].location != NSNotFound);
@@ -297,6 +299,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 - (void)testConnection {
     __block BOOL testConnectionOk;
     __block BOOL testConnectionFinished;
+    
     [apprienSdk TestConnection:^(BOOL statusCheck, BOOL tokenCheck) {
         if(statusCheck && tokenCheck){
             testConnectionOk = TRUE;
@@ -339,6 +342,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 
     XCTAssertTrue(serviceOk);
 }
+
 //Test Apprien service
 - (void)testPlainRequest {
     __block BOOL serviceOk;
@@ -349,13 +353,15 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
        [request addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
        [request addValue:@"text/plain" forHTTPHeaderField:@"Accept"];
 
-           NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-           [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-           NSData * responseData = [requestReply dataUsingEncoding:NSUTF8StringEncoding];
-           NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
-           NSLog(@"requestReply: %@", jsonDict);
+       NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+       [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+       NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+       NSData * responseData = [requestReply dataUsingEncoding:NSUTF8StringEncoding];
+       NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
+       NSLog(@"requestReply: %@", jsonDict);
+       serviceCheckFinished = TRUE;
        }] resume];
+    
     while(serviceCheckFinished == FALSE){
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
@@ -368,8 +374,6 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
     __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
 
-    
-   
     NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
 
     NSURLSession *sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
@@ -378,6 +382,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
     [[sessionWithoutADelegate dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@"Got response %@ with error %@.\n", response, error);
         NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
     }] resume];
     while(serviceCheckFinished == FALSE){
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
@@ -403,7 +408,8 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
     [request addValue:@"Bearer: $2y$10$snfk2X/5.XV4Jjnmx4C1Qeo9DNAa6tIi3VJA6EEpqzacJqY6XWGVm" forHTTPHeaderField:@"Authorization "];
     [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@"Got response %@ with error %@.\n", response, error);
-        //NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
     }] resume];
     while(serviceCheckFinished == FALSE){
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
@@ -416,12 +422,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
     __block BOOL serviceOk;
     __block BOOL serviceCheckFinished;
 
-    
-   
     NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-
-
-  
     NSURLSession *sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
     NSURL *url = [NSURL URLWithString:@"http://game.apprien.com/api/v1/stores/google/games/fi.phz.appriensdkdemo/prices"];
     
@@ -430,10 +431,11 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
        [request setURL:[NSURL URLWithString:@"http://game.apprien.com/status"]];
        [request setHTTPMethod:@"GET"];
 
-    [request addValue:@"Bearer $2y$10$snfk2X/5.XV4Jjnmx4C1Qeo9DNAa6tIi3VJA6EEpqzacJqY6XWGVm" forHTTPHeaderField:@"Authorization"];
+    [request addValue:@"Bearer:$2y$10$snfk2X/5.XV4Jjnmx4C1Qeo9DNAa6tIi3VJA6EEpqzacJqY6XWGVm" forHTTPHeaderField:@"Authorization "];
     [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSLog(@"Got response %@ with error %@.\n", response, error);
         NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
     }] resume];
     while(serviceCheckFinished == FALSE){
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
