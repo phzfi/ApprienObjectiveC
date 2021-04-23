@@ -80,10 +80,8 @@ void ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_POST_RECEIPT_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
     request.Post(url, formData, callback);
-    request.SetRequestHeader("Authorization", "Bearer " + token);
+    request.SetRequestHeader("Authorization:", "Bearer " + token);
     request.SendWebRequest();
-
-
 }
 
 void ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int errorCode)> callback) {
@@ -99,7 +97,7 @@ void ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, 
     auto request = WebRequest();
     snprintf(url, sizeof(url), REST_POST_PRODUCTS_SHOWN_URL, StoreIdentifier().c_str());
     request.Post(url, formData, callback);
-    request.SetRequestHeader("Authorization", "Bearer " + token);
+    request.SetRequestHeader("Authorization:", "Bearer " + token);
     request.SendWebRequest();
 
     if (request.responseCode != 0) {

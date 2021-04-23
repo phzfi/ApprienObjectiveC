@@ -144,7 +144,6 @@ NSArray <NSString *> *testIAPids;
 
     NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
     __block BOOL fetchPricesFinished;
-    apprienSdk.DEBUGGING_ENABLED = TRUE;
     __block NSArray * productsOut = [[NSArray alloc] init];
     [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         productsOut = productsWithPrices;

@@ -150,8 +150,8 @@ int WebRequest::HandleResponse(NSURLResponse *response, NSError *error) const {/
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response; //must do type cast to get accss to statusCode etc
     int responseCode = (int)httpResponse.statusCode;
     NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
-    if (responseCode != 200 || error.code != 0) {
-        //SendError(request.responseCode, "Error occurred while checking token validity: HTTP error: " + request.errorMessage);
+    if (responseCode != 0 || error.code != 0) {
+        //SendError(responseCode, "Error occurred while checking token validity: HTTP error: " + error.code);
         NSLog(@"Response code is: %d", responseCode);
         NSLog(@"Error message is:  %@", errorMessage);
     }
