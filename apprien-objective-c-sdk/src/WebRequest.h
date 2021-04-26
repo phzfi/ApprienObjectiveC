@@ -3,8 +3,8 @@
 #include <functional>
 #include <sstream>
 #import "FormDataSection.h"
+#import <Foundation/Foundation.h>
 
-#import <curl/curl.h>
 
 
 /// <summary>
@@ -13,11 +13,10 @@
 class WebRequest
 {
 private:
-    CURL *curl = NULL;
 
     struct curl_slist *chunk = NULL;
 
-    bool Initialize();
+    NSMutableURLRequest *Initialize(std::string url, NSString* httpMethod);
 
 public:
     /// <summary>
@@ -35,21 +34,10 @@ public:
     /// </summary>
     std::string errorMessage = "";
 
-    
     /// <summary>
-    /// Set verbose mode on/off.
+    /// Get session.
     /// </summary>
-    static int CURL_VERBOSE;
-
-    /// <summary>
-    /// Switch on/off the progress meter.
-    /// </summary>
-    static int CURL_NOPROGRESS;
-
-    /// <summary>
-    /// Verify the peer's SSL certificate.
-    /// </summary>
-    static int CURL_VERIFYPEER;
+    NSURLSession *GetSession();
 
     /// <summary>
     /// Certificate Authority bundle file.
@@ -64,21 +52,23 @@ public:
     /// <summary>
     /// Set a custom value to HTTP request header.
     /// </summary>
-    void SetRequestHeader(std::string name, std::string value);
+    void SetRequestHeader(std::string name, std::string  value);
 
     /// <summary>
     /// Create a WebRequest for HTTP GET.
     /// </summary>
-    bool Get(std::string url);
+    NSMutableURLRequest *Get(std::string url);
 
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.
     /// </summary>
-    bool Post(std::string url, std::list<FormDataSection> formSections);
+    NSURLSessionUploadTask *Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack);
 
     /// <summary>
     /// Create a WebRequest configured to send post data to a server via HTTP POST.
     /// </summary>
-    bool Post(std::string url, const char *postData = nullptr);
+    NSURLSessionUploadTask *Post(std::string url, const char *postData = nullptr);
+
+    int HandleResponse(NSURLResponse *response, NSError *error) const;
 };
 

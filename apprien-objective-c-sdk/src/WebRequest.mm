@@ -32,27 +32,46 @@ inline bool FileExists(const std::string &name)
     return f.good();
 }
 
-int WebRequest::CURL_VERBOSE = 0;
-int WebRequest::CURL_NOPROGRESS = 1;
-int WebRequest::CURL_VERIFYPEER = 1;
+NSMutableURLRequest *request;
+NSURLSession *session;
+NSURLSessionDataTask *dataTask;
+NSURLSessionUploadTask *uploadTask;
 
-bool WebRequest::Initialize()
+NSMutableURLRequest *WebRequest::Initialize(std::string url, NSString* httpMethod)
 {
-    curl = curl_easy_init();
-    if (curl)
-    {
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, CURL_VERIFYPEER);
-        auto certFile = WorkingDir() + Separator() + CURL_CA_BUNDLE;
-        if (FileExists(certFile))
-        {
-            // Path to Certificate Authority bundle
-            curl_easy_setopt(curl, CURLOPT_CAINFO, certFile.c_str());
-        }
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, CURL_NOPROGRESS);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, CURL_VERBOSE);
-        return true;
+   // auto certFile = WorkingDir() + Separator() + CURL_CA_BUNDLE;
+    if(session == nil){
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        session = [NSURLSession sessionWithConfiguration:config];
     }
-    return false;
+    
+    NSURL *nsurl = [NSURL URLWithString:[NSString stringWithCString:url.c_str() encoding:NSString.defaultCStringEncoding]];
+    request = [[NSMutableURLRequest alloc] initWithURL:nsurl];
+    request.HTTPMethod = httpMethod;
+    
+    return request;
+}
+ 
+ void URLSession(NSURLSession * session, NSURLAuthenticationChallenge *challenge, NSString *path, std::function<void(NSURLSessionAuthChallengeDisposition, NSURLCredential *)> completionHandler )
+{
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+    NSData *remoteCertificateData = CFBridgingRelease(SecCertificateCopyData(certificate));
+
+    NSString *cerPath = path;
+    NSData *localCertData = [NSData dataWithContentsOfFile:cerPath];
+    
+    if ([remoteCertificateData isEqualToData:localCertData])
+    {
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
+        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
+    else
+    {
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
+    }
 }
 
 std::function<void(char *)> OnWebRequest;
@@ -68,81 +87,87 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
 
 bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
 {
-    isDone = false;
-    OnWebRequest = callback;
-    if (curl)
-    {
-        if (chunk != NULL)
-        {
-            curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
-        }
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, RequestCallback);
-        // Perform the request
-        CURLcode curlcode = curl_easy_perform(curl);
-        responseCode = curlcode;
-        errorMessage = curl_easy_strerror(curlcode);
-        // End a libcurl session
-        curl_easy_cleanup(curl);
-        if (chunk != NULL)
-        {
-            // Free the custom headers
-            curl_slist_free_all(chunk);
-        }
-        isDone = true;
-    }
-    return isDone;
-}
+    if(dataTask){
+        OnWebRequest = callback;
+        [dataTask resume]; //send the HTTP request
 
-void WebRequest::SetRequestHeader(std::string name, std::string value)
-{
-    std::string header = name;
-    if (!value.empty())
-    {
-        header += ": " + value;
-    }
-    chunk = curl_slist_append(chunk, header.c_str());
-}
-
-bool WebRequest::Get(std::string url)
-{
-    if (Initialize())
-    {
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         return true;
     }
+    if(uploadTask){
+        OnWebRequest = callback;
+        [uploadTask resume];//send the HTTP request
+ 
+        return true;
+    }
+
+    //If there was no task to send then return
     return false;
 }
 
-bool WebRequest::Post(std::string url, std::list<FormDataSection> formSections)
+void WebRequest::SetRequestHeader(std::string name, std::string  value)
 {
-    if (Initialize())
-    {
-        std::ostringstream oss;
-        for (auto item : formSections)
-        {
-            oss << item.Name.c_str();
-            char *encoded = curl_easy_escape(curl, item.Data, sizeof(item.Data));
-            if (encoded)
-            {
-                oss << encoded;
-                curl_free(encoded);
-            }
-        }
-        auto postdata = oss.str();
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postdata.c_str());
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        return true;
-    }
-    return false;
+  
+    NSString *headerName = [NSString stringWithCString: name.c_str() encoding:NSString.defaultCStringEncoding];
+    NSString *headerValue = [NSString stringWithCString: value.c_str() encoding:NSString.defaultCStringEncoding];
+      
+    
+    [request addValue:headerValue forHTTPHeaderField:headerName];
 }
 
-bool WebRequest::Post(std::string url, const char *postData)
+NSMutableURLRequest *WebRequest::Get(std::string url)
 {
-    if (Initialize())
+    return Initialize(url, @"GET");
+}
+
+NSURLSession *WebRequest::GetSession(){
+    return session;
+}
+
+NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack)
+{
+    Initialize(url, @"POST");
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];;
+    
+    for (auto item : formSections)
     {
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData);
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        return true;
+        [dictionary setObject:[NSString stringWithCString: item.Data encoding:NSString.defaultCStringEncoding ] forKey:[NSString stringWithCString: item.Name.c_str() encoding:NSString.defaultCStringEncoding ] ];
     }
-    return false;
+    
+    NSError *error = nil;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary
+                    options:kNilOptions error:&error];
+    
+    if (!error) {
+        uploadTask = [session uploadTaskWithRequest:request fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
+            int responseCode = HandleResponse(response, error);
+            callBack(responseCode, (int)error.code);
+        }];
+    }
+    return uploadTask;
+}
+
+int WebRequest::HandleResponse(NSURLResponse *response, NSError *error) const {// Handle response here
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response; //must do type cast to get accss to statusCode etc
+    int responseCode = (int)httpResponse.statusCode;
+    NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
+    if (responseCode != 0 || error.code != 0) {
+        //SendError(responseCode, "Error occurred while checking token validity: HTTP error: " + error.code);
+        NSLog(@"Response code is: %d", responseCode);
+        NSLog(@"Error message is:  %@", errorMessage);
+    }
+    return responseCode;
+}
+
+NSURLSessionUploadTask *WebRequest::Post(std::string url, const char *postData)
+{
+    NSString *str = [NSString stringWithCString: postData encoding:NSString.defaultCStringEncoding ];
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+
+    uploadTask = [session uploadTaskWithRequest:request
+                    fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
+        // Handle response here
+    }];
+    
+    
+    return uploadTask;
 }

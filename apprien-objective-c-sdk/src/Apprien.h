@@ -123,41 +123,46 @@ namespace Apprien {
         /// Request timeout in seconds
         /// </summary>
         int REQUEST_TIMEOUT = 5;
-
+        
+        /// <summary>
+        /// Sends error message when Apprien encounter any problems
+        /// </summary>
+        void CatchAndSendRequestError();
+        
         /// <summary>
         /// Apprien REST API endpoint for testing the availability of the service
         /// </summary>
-        const char *REST_GET_APPRIEN_STATUS = "https://game.apprien.com/status";
+        const char *REST_GET_APPRIEN_STATUS = "http://game.apprien.com/status";
 
         /// <summary>
         /// Apprien REST API endpoint for testing the validity of the given token
         /// </summary>
-        const char *REST_GET_VALIDATE_TOKEN_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/auth";
+        const char *REST_GET_VALIDATE_TOKEN_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
 
         /// <summary>
         /// Apprien REST API endpoint for fetching all optimum product variants
         /// </summary>
-        const char *REST_GET_ALL_PRICES_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/prices";
+        const char *REST_GET_ALL_PRICES_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
 
         /// <summary>
         /// Apprien REST API endpoint for fetching the optimum product variant for a single product
         /// </summary>
-        const char *REST_GET_PRICE_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
+        const char *REST_GET_PRICE_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
         /// </summary>
-        const char *REST_POST_RECEIPT_URL = "https://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
+        const char *REST_POST_RECEIPT_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
         /// </summary>
-        const char *REST_POST_ERROR_URL = "https://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
+        const char *REST_POST_ERROR_URL = "http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
 
         /// <summary>
         /// Apprien REST API endpoint for POSTing a notice to Apprien that product was shown.
         /// </summary>
-        const char *REST_POST_PRODUCTS_SHOWN_URL = "https://game.apprien.com/api/v1/stores/%s/shown/products";
+        const char *REST_POST_PRODUCTS_SHOWN_URL = "http://game.apprien.com/api/v1/stores/%s/shown/products";
 
         /// <summary>
         /// Gets the store's string identifier for the currently set ApprienIntegrationType
@@ -190,23 +195,14 @@ namespace Apprien {
             this->integrationType = integrationType;
             this->token = token;
         }
-
-        /// <summary>
-        /// Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
-        /// </summary>
-        /// <param name="callback">The first parameter is true if Apprien is reachable. The second parameter is true if the provided token is valid</param>
-        bool TestConnection(bool &statusCheck, bool &tokenCheck);
-
-        /// <summary>
-        /// Check whether Apprien API service is online.
-        /// </summary>
-        bool CheckServiceStatus();
-
+        
+        std::vector<ApprienManager::ApprienProduct> GetProducts(char *data);
+        
         /// <summary>
         /// Validates the supplied access token with the Apprien API
         /// </summary>
-        bool CheckTokenValidity();
-
+        void CheckTokenValidity(std::function<void(int response, int errorCode)> callback);
+        
         /// <summary>
         /// <para>
         /// Fetch all Apprien variant IAP ids with optimum prices.
@@ -218,8 +214,10 @@ namespace Apprien {
         /// </para>
         /// </summary>
         /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
-        bool FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
-
+        WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
+        
+        std::string BuildUrl(const char *address);
+        
         /// <summary>
         /// <para>
         /// Posts the receipt to Apprien for calculating new prices.
@@ -229,12 +227,12 @@ namespace Apprien {
         /// </para>
         /// </summary>
         /// <param name="receiptJson"></param>
-        bool PostReceipt(std::string receiptJson);
+        void PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback);
 
         /// <summary>
         /// Tell Apprien that these products were shown. NOTE: This is needed for Apprien to work correctly.
         /// </summary>
-        bool ProductsShown(std::vector<ApprienProduct> apprienProducts);
+        void ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int error)> callback );
 
         /// <summary>
         /// <para>
@@ -251,6 +249,8 @@ namespace Apprien {
         /// <param name="storeIapId">Apprien product IAP id on the Store (Google or Apple) e.g. z_pack2_gold.apprien_399_abcd</param>
         /// <returns>Returns the base IAP id for the given Apprien variant IAP id.</returns>
         std::string GetBaseIAPId(std::string storeIAPId);
+
+        void CompleteValidateServices(const std::function<void(BOOL, BOOL)> &callback, int response, int error) const;
     };
 
 } // namespace Apprien

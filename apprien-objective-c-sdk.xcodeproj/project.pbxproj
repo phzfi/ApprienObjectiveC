@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* ApprienProduct.m */; };
 		1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */; };
-		8B560F0625F6099D00630F0D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC21BD25E51A4F00900BDC /* libcurl.tbd */; };
-		8B5CC68A2609CE5100B856AA /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5CC6842609CE1700B856AA /* libcurl.tbd */; };
 		8BFC210325E3976000900BDC /* ApprienSdk.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC210225E3976000900BDC /* ApprienSdk.h */; };
 		8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210425E3976000900BDC /* ApprienSdk.mm */; };
 		8BFC211325E3985000900BDC /* apprien_tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC211225E3985000900BDC /* apprien_tests.m */; };
@@ -43,9 +41,6 @@
 		1B182BED67977C3E8D5C5384 /* ApprienProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApprienProduct.m; sourceTree = "<group>"; };
 		1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApprienProduct.h; sourceTree = "<group>"; };
 		572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.release.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.release.xcconfig"; sourceTree = "<group>"; };
-		8B5CC64C2608E16E00B856AA /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib/libcurl.tbd; sourceTree = DEVELOPER_DIR; };
-		8B5CC6802609CCA400B856AA /* libcurl.4.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libcurl.4.tbd; sourceTree = "<group>"; };
-		8B5CC6842609CE1700B856AA /* libcurl.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libcurl.tbd; sourceTree = "<group>"; };
 		8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libapprien-objective-c-sdk.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BFC210225E3976000900BDC /* ApprienSdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApprienSdk.h; sourceTree = "<group>"; };
 		8BFC210425E3976000900BDC /* ApprienSdk.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ApprienSdk.mm; sourceTree = "<group>"; };
@@ -55,7 +50,6 @@
 		8BFC215A25E4F5AD00900BDC /* WebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebRequest.h; path = "apprien-objective-c-sdk/src/WebRequest.h"; sourceTree = SOURCE_ROOT; };
 		8BFC215B25E4F5AD00900BDC /* WebRequest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WebRequest.mm; path = "apprien-objective-c-sdk/src/WebRequest.mm"; sourceTree = SOURCE_ROOT; };
 		8BFC216D25E4F7C600900BDC /* FormDataSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDataSection.h; sourceTree = "<group>"; };
-		8BFC21BD25E51A4F00900BDC /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		8BFC21D625E5204800900BDC /* Apprien.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Apprien.mm; sourceTree = "<group>"; };
 		8BFC21D725E5204800900BDC /* Apprien.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apprien.h; sourceTree = "<group>"; };
 		8BFC21DC25E520E800900BDC /* sha256.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = sha256.mm; sourceTree = "<group>"; };
@@ -68,7 +62,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B5CC68A2609CE5100B856AA /* libcurl.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +69,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B560F0625F6099D00630F0D /* libcurl.tbd in Frameworks */,
 				8BFC211525E3985000900BDC /* libapprien-objective-c-sdk.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,8 +79,6 @@
 		1E263B664A253575BC559B24 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8BFC21BD25E51A4F00900BDC /* libcurl.tbd */,
-				8B5CC64C2608E16E00B856AA /* libcurl.tbd */,
 				0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */,
 			);
 			name = Frameworks;
@@ -138,8 +128,6 @@
 		8BFC212325E3E9AF00900BDC /* src */ = {
 			isa = PBXGroup;
 			children = (
-				8B5CC6802609CCA400B856AA /* libcurl.4.tbd */,
-				8B5CC6842609CE1700B856AA /* libcurl.tbd */,
 				8BFC21E225E5210A00900BDC /* json.hpp */,
 				8BFC21DC25E520E800900BDC /* sha256.mm */,
 				8BFC21DD25E520E800900BDC /* sha256.h */,
@@ -449,6 +437,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -471,6 +460,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -483,11 +473,16 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "apprien-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "phz-full-stack.apprien-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -500,11 +495,16 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "apprien-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "phz-full-stack.apprien-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

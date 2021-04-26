@@ -8,7 +8,6 @@
 #import <XCTest/XCTest.h>
 #import "ApprienSdk.h"
 #import "ApprienProduct.h"
-#import <curl/curl.h>
 
 @interface apprien_tests : XCTestCase
 
@@ -37,7 +36,9 @@ NSArray <NSString *> *testIAPids;
 
     apprienSdk = [[ApprienSdk alloc] init];
     [apprienSdk ApprienManager:testPackageName integrationType:GooglePlayStore token:[token stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""]];
+        
     }
+    apprienSdk.DEBUGGING_ENABLED = TRUE;
 }
 
 - (void)tearDown {
@@ -85,7 +86,7 @@ NSArray <NSString *> *testIAPids;
 //Quick test to check that the api returns nstrings and they have base url in it.
 - (void)testApprienReturnUrls {
     @autoreleasepool {
-        NSString *baseUrl = @"https://";
+        NSString *baseUrl = @"http://";
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([[apprienSdk REST_GET_ALL_PRICES_URL] rangeOfString:baseUrl].location != NSNotFound);
         XCTAssertTrue([[apprienSdk REST_GET_PRICE_URL] rangeOfString:baseUrl].location != NSNotFound);
@@ -100,7 +101,7 @@ NSArray <NSString *> *testIAPids;
 //Test that price Url gets changed
 - (void)testPriceUrlGetsChanged {
     @autoreleasepool {
-        NSString *baseUrl = @"https://";
+        NSString *baseUrl = @"http://";
         [apprienSdk setREST_GET_PRICE_URL:baseUrl];
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([[apprienSdk REST_GET_PRICE_URL] rangeOfString:baseUrl].location != NSNotFound);
@@ -113,7 +114,7 @@ NSArray <NSString *> *testIAPids;
 //Test that all price Url gets changed
 - (void)testAllPriceUrlGetsChanged {
     @autoreleasepool {
-        NSString *baseUrl = @"https://";
+        NSString *baseUrl = @"http://";
         [apprienSdk setREST_GET_ALL_PRICES_URL:baseUrl];
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([[apprienSdk REST_GET_ALL_PRICES_URL] rangeOfString:baseUrl].location != NSNotFound);
@@ -142,17 +143,20 @@ NSArray <NSString *> *testIAPids;
 - (void)testFetchingManyProductsShouldSucceed {
 
     NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
-        products = productsWithPrices;
+    __block BOOL fetchPricesFinished;
+    __block NSArray * productsOut = [[NSArray alloc] init];
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+        productsOut = productsWithPrices;
+        fetchPricesFinished=TRUE;
     }];
+
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
-    for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
+    for (int i = 0; i < [productsOut count]; i++) {
+        ApprienProduct *product = productsOut[i];
         NSString *expectedStringToBeFound = expectedVariantIdPart[i];
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([product.apprienVariantIAPId rangeOfString:expectedStringToBeFound].location != NSNotFound);
@@ -165,12 +169,14 @@ NSArray <NSString *> *testIAPids;
     apprienSdk.REST_GET_ALL_PRICES_URL = [[@"http://localhost:" stringByAppendingString:@"123123"] stringByAppendingString:@"/api/v0/stores/google/games/{0}/products/{1}/prices"];
 
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished = TRUE;
     }];
+
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
@@ -185,12 +191,13 @@ NSArray <NSString *> *testIAPids;
 
     [apprienSdk setToken:@"badToken"];
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished = TRUE;
     }];
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
 
@@ -213,15 +220,17 @@ NSArray <NSString *> *testIAPids;
     apprienSdk.REQUEST_TIMEOUT = 0.0000000001f;
 
     NSArray *expectedVariantIdPart = [[NSArray alloc] initWithArray:products];
-
-    BOOL isDone = [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
+    __block BOOL fetchPricesFinished;
+    [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         products = productsWithPrices;
+        fetchPricesFinished=TRUE;
     }];
 
     //wait for async to complete
-    while (!isDone) {
+    while (!fetchPricesFinished) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, false);
     }
+
     for (int i = 0; i < [products count]; i++) {
         ApprienProduct *product = products[i];
         ApprienProduct *expectedStringToBeFound = expectedVariantIdPart[i];
@@ -239,55 +248,35 @@ NSArray <NSString *> *testIAPids;
     }];
 }
 
-- (void)testCurlWorks {
-    CURL *curl;
-    CURLcode res;
-
-    /* In windows, this will init the winsock stuff */
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    /* get a curl handle */
-    curl = curl_easy_init();
-    if (curl) {
-        /* First set the URL that is about to receive our POST. This URL can
-           just as well be a https:// URL if that is what should receive the
-           data. */
-        curl_easy_setopt(curl, CURLOPT_URL, "https://www.keycdn.com");
-        char *response_string[5000];
-        char *header_string[5000];
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFunction);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
-        curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
-
-        /* Perform the request, res will get the return code */
-        res = curl_easy_perform(curl);
-        /* Check for errors */
-        if (res != CURLE_OK) {
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-            XCTAssertTrue(FALSE);
-        } else {
-            XCTAssertTrue(TRUE);
-        }
-
-        /* always cleanup */
-        curl_easy_cleanup(curl);
-    }
-    curl_global_cleanup();
-}
 
 size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
-
     return size * nmemb;
 }
 
-/*TODO:Ask how to to test this?
 - (void)testProductsShown {
-    BOOL isDone = [apprienSdk ProductsShown:products];
-    while (isDone == FALSE) {
+    __block BOOL postReceiptFinished;
+    [apprienSdk ProductsShown:products completionHandler:^(){
+        postReceiptFinished = TRUE;
+    }];
+    while (postReceiptFinished == FALSE) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
     }
 
+
+    XCTAssertEqual(postReceiptFinished, TRUE);
+    
+}
+
+- (void)testPostReceipt {
+    __block BOOL postReceiptFinished;
+    NSString *receipt = @"test receipt,  price: 402";
+    [apprienSdk PostReceipt:receipt completionHandler:^(){
+
+        postReceiptFinished = TRUE;
+    }];
+    while(postReceiptFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
     for (int i = 0; i < [products count]; i++) {
         ApprienProduct *product = products[i];
         NSString *expectedIapId = [testIAPids[i] stringByAppendingString:@"-variant"];
@@ -295,7 +284,6 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         XCTAssertEqual(expectedIapId, resultId);
     }
 }
-*/
 
 - (void)testGetBaseIAPId {
     NSString *baseIapId = [apprienSdk GetBaseIAPId:defaultIAPid];
@@ -308,33 +296,147 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
 
 //Test against the real Apprien service. If these fail the server is most likely down.
 - (void)testConnection {
-    if ([apprienSdk TestConnection] == TRUE) {
-        //Connection to Apprien up
-        XCTAssertTrue(TRUE);
-    } else {
-        //Connection to Apprien down
-        XCTAssertTrue(FALSE);
+    __block BOOL testConnectionOk;
+    __block BOOL testConnectionFinished;
+    
+    [apprienSdk TestConnection:^(BOOL statusCheck, BOOL tokenCheck) {
+        if(statusCheck && tokenCheck){
+            testConnectionOk = TRUE;
+        }
+        testConnectionFinished = TRUE;
+    }];
+
+    while(testConnectionFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
+
+    XCTAssertTrue(testConnectionOk);
 }
 
 - (void)testTokenValidity {
-    if ([apprienSdk CheckTokenValidity] == TRUE) {
-        //Success
-        XCTAssertTrue(TRUE);
-    } else {
-        //Success
-        XCTAssertTrue(FALSE);
+    __block BOOL tokenOk;
+    __block BOOL checkTokenFinished;
+    [apprienSdk CheckTokenValidity: ^(BOOL tokenIsValid) {
+            tokenOk = tokenIsValid;
+            checkTokenFinished = TRUE;
+    }];
+    while(checkTokenFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
+
+    XCTAssertTrue(tokenOk);
 }
 
 //Test Apprien service
 - (void)testApprienServiceStatus {
-    if ([apprienSdk CheckServiceStatus] == TRUE) {
-        //Success
-        XCTAssertTrue(TRUE);
-    } else {
-        //Success
-        XCTAssertTrue(FALSE);
+    __block BOOL serviceOk;
+    __block BOOL serviceCheckFinished;
+    [apprienSdk CheckServiceStatus:^(BOOL serviceIsOk) {
+        serviceOk = serviceIsOk;
+        serviceCheckFinished = TRUE;
+    }];
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
+
+    XCTAssertTrue(serviceOk);
+}
+
+//Test Apprien service
+- (void)testPlainRequest {
+    __block BOOL serviceCheckFinished;
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+       [request setURL:[NSURL URLWithString:@"https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"]];
+       [request setHTTPMethod:@"GET"];
+       [request addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
+       [request addValue:@"text/plain" forHTTPHeaderField:@"Accept"];
+
+       NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+       [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+       NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+       NSData * responseData = [requestReply dataUsingEncoding:NSUTF8StringEncoding];
+       NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
+       NSLog(@"requestReply: %@", jsonDict);
+       serviceCheckFinished = TRUE;
+       }] resume];
+    
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+
+    XCTAssertTrue(serviceCheckFinished);
+}
+
+//Test Apprien service
+- (void)testApprienServiceStatusPlainRequest2 {
+    __block BOOL serviceCheckFinished;
+
+    NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+
+    NSURLSession *sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
+    NSURL *url = [NSURL URLWithString:@"http://game.apprien.com/status"];
+     
+    [[sessionWithoutADelegate dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"Got response %@ with error %@.\n", response, error);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
+    }] resume];
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+
+    XCTAssertTrue(serviceCheckFinished);
+}
+
+- (void)testApprienServiceStatusPlainRequest3 {
+    __block BOOL serviceCheckFinished;
+
+    NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+  
+    NSURLSession *sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
+    NSURL *url = [NSURL URLWithString:@"http://game.apprien.com/status"];
+    
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+       [request setURL:[NSURL URLWithString:@"http://game.apprien.com/status"]];
+       [request setHTTPMethod:@"GET"];
+
+    [request addValue:@"Bearer: $2y$10$snfk2X/5.XV4Jjnmx4C1Qeo9DNAa6tIi3VJA6EEpqzacJqY6XWGVm" forHTTPHeaderField:@"Authorization "];
+    [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"Got response %@ with error %@.\n", response, error);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
+    }] resume];
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+
+    XCTAssertTrue(serviceCheckFinished);
+}
+
+- (void)testApprienServiceStatusPlainRequest4 {
+    __block BOOL serviceOk;
+    __block BOOL serviceCheckFinished;
+
+    NSURLSessionConfiguration *defaultConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *sessionWithoutADelegate = [NSURLSession sessionWithConfiguration:defaultConfiguration];
+    NSURL *url = [NSURL URLWithString:@"http://game.apprien.com/api/v1/stores/google/games/fi.phz.appriensdkdemo/prices"];
+    
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+       [request setURL:[NSURL URLWithString:@"http://game.apprien.com/status"]];
+       [request setHTTPMethod:@"GET"];
+
+    [request addValue:@"Bearer:$2y$10$snfk2X/5.XV4Jjnmx4C1Qeo9DNAa6tIi3VJA6EEpqzacJqY6XWGVm" forHTTPHeaderField:@"Authorization "];
+    [[sessionWithoutADelegate dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"Got response %@ with error %@.\n", response, error);
+        NSLog(@"DATA:\n%@\nEND DATA\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        serviceCheckFinished = TRUE;
+    }] resume];
+    while(serviceCheckFinished == FALSE){
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
+    }
+
+    XCTAssertTrue(serviceCheckFinished);
 }
 @end
