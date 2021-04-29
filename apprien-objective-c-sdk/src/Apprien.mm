@@ -1,9 +1,7 @@
-#include "Apprien.h"
-
-using namespace Apprien;
-
+#import "Apprien.h"
 #include "sha256.h"
 #include "json.hpp"
+using namespace Apprien;
 
 using json = nlohmann::json;
 
@@ -41,7 +39,7 @@ void from_json(const json &j, ApprienProductList &s) {
     std::copy(sj.begin(), sj.end(), s.products.begin());
 }
 
-std::string ApprienManager::ApprienIdentifier() {
+std::string Apprien::ApprienManager::ApprienIdentifier() {
     std::stringstream ss;
     ss << std::hex << SHA256(deviceUniqueIdentifier)[0];
     return ss.str();
