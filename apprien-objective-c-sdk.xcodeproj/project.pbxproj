@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* ApprienProduct.m */; };
 		1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8B4CE427263ACEF10034FCA6 /* json.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC21E225E5210A00900BDC /* json.hpp */; };
 		8BFC210325E3976000900BDC /* ApprienSdk.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFC210225E3976000900BDC /* ApprienSdk.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC210425E3976000900BDC /* ApprienSdk.mm */; };
 		8BFC211325E3985000900BDC /* apprien_tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC211225E3985000900BDC /* apprien_tests.m */; };
@@ -110,6 +111,7 @@
 				8BFC21DC25E520E800900BDC /* sha256.mm */,
 				8BFC21D625E5204800900BDC /* Apprien.mm */,
 				8BFC215B25E4F5AD00900BDC /* WebRequest.mm */,
+				8BFC21E225E5210A00900BDC /* json.hpp */,
 				8BFC212325E3E9AF00900BDC /* src */,
 				8BFC210225E3976000900BDC /* ApprienSdk.h */,
 				8BFC210425E3976000900BDC /* ApprienSdk.mm */,
@@ -131,7 +133,6 @@
 		8BFC212325E3E9AF00900BDC /* src */ = {
 			isa = PBXGroup;
 			children = (
-				8BFC21E225E5210A00900BDC /* json.hpp */,
 				8BFC21DD25E520E800900BDC /* sha256.h */,
 				8BFC21D725E5204800900BDC /* Apprien.h */,
 				8BFC215A25E4F5AD00900BDC /* WebRequest.h */,
@@ -280,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4CE427263ACEF10034FCA6 /* json.hpp in Sources */,
 				8BFC223125E65BA600900BDC /* sha256.mm in Sources */,
 				8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */,
 				8BFC222E25E65BA200900BDC /* Apprien.mm in Sources */,
