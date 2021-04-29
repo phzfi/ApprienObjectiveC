@@ -65,13 +65,13 @@ void ApprienManager::SendError(int responseCode, std::string errorMessage) {
 
 
 
-std::string ApprienManager::BuildUrl(const char* address){
+std::string Apprien::ApprienManager::BuildUrl(const char* address){
     char url[5000];
     snprintf(url, sizeof(url), address, StoreIdentifier().c_str(), gamePackageName.c_str());
     return url;
 }
 
-void ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
+void Apprien::ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
     auto formData = std::list<FormDataSection>();
     std::list<FormDataSection>::iterator it = formData.begin();
     formData.insert(it, FormDataSection("receipt", receiptJson.c_str()));
@@ -84,7 +84,7 @@ void ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int
     request.SendWebRequest();
 }
 
-void ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int errorCode)> callback) {
+void Apprien::ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int errorCode)> callback) {
     auto formData = std::list<FormDataSection>();
     std::list<FormDataSection>::iterator it = formData.begin();
     for (unsigned int i = 0; i < apprienProducts.size(); i++) {
@@ -105,7 +105,7 @@ void ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, 
     }
 }
 
-std::string ApprienManager::GetBaseIAPId(std::string storeIAPId) {
+std::string Apprien::ApprienManager::GetBaseIAPId(std::string storeIAPId) {
     // Default result to (base) storeIapId
     auto result = storeIAPId;
 
@@ -121,7 +121,7 @@ std::string ApprienManager::GetBaseIAPId(std::string storeIAPId) {
     return result;
 }
 
-std::vector<ApprienManager::ApprienProduct> ApprienManager::ApprienProduct::FromIAPCatalog(std::vector<std::string> catalog) {
+std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::ApprienProduct::FromIAPCatalog(std::vector<std::string> catalog) {
     auto apprienProducts = std::vector<ApprienProduct>();
     for (auto &product : catalog) {
         apprienProducts.push_back(ApprienProduct(product));
@@ -131,7 +131,7 @@ std::vector<ApprienManager::ApprienProduct> ApprienManager::ApprienProduct::From
 /// <summary>
 /// Parse the JSON data and update the variant IAP ids.
 /// </summary>
-std::vector<ApprienManager::ApprienProduct> ApprienManager::GetProducts(char *data) {
+std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::GetProducts(char *data) {
     std::vector<ApprienManager::ApprienProduct> products;
     auto productLookup = new std::map<std::string, ApprienManager::ApprienProduct>();
     try {

@@ -59,19 +59,13 @@ Pod::Spec.new do |spec|
 
 
   spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :tag => 'v0.0.1-alpha.1' }
-  #spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :branch => 'fix-issue-cannot-find-curl-and-remove-unwanted-diagram' }
+  #spec.source       = { :git => 'https://github.com/phzfi/ApprienObjectiveC.git', :branch => 'main' }
   
 
   spec.source_files  = "apprien-objective-c-sdk", "apprien-objective-c-sdk/**/*.{h,m}"
   spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
-
-
-spec.framework  = "libcurl"
-spec.library='curl.tbd'
-spec.ios.vendored_frameworks = 'libcurl.tbd'
-
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #

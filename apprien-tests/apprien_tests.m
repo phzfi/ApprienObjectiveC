@@ -147,7 +147,7 @@ NSArray <NSString *> *testIAPids;
     __block NSArray * productsOut = [[NSArray alloc] init];
     [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         productsOut = productsWithPrices;
-        fetchPricesFinished=TRUE;
+        fetchPricesFinished = TRUE;
     }];
 
     //wait for async to complete
