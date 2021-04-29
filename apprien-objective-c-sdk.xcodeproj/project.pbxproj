@@ -437,7 +437,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.iapman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -460,7 +460,7 @@
 					"$(PROJECT_DIR)/apprien-objective-c-sdk",
 					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.objectivecdemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.iapman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

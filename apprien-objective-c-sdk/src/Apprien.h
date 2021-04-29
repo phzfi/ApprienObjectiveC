@@ -203,19 +203,6 @@ namespace Apprien {
         /// </summary>
         void CheckTokenValidity(std::function<void(int response, int errorCode)> callback);
         
-        /// <summary>
-        /// <para>
-        /// Fetch all Apprien variant IAP ids with optimum prices.
-        /// </para>
-        /// <para>
-        /// Prices are located in the Apprien -generated IAP id variants. Typically
-        /// the actual prices are fetched from the Store (Google or Apple) by the
-        /// StoreManager by providing the IAP id (or in this case the variant).
-        /// </para>
-        /// </summary>
-        /// <param name="callback">Callback that is called when all product variant requests have completed.</param>
-        WebRequest FetchApprienPrices(std::vector<ApprienProduct> apprienProducts, std::function<void(std::vector<Apprien::ApprienManager::ApprienProduct> apprienProductsC)> callback);
-        
         std::string BuildUrl(const char *address);
         
         /// <summary>
