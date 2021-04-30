@@ -1,10 +1,8 @@
 #pragma once
 
-#include "WebRequest.h"
-
-#include <list>
-#include <vector>
-#include <map>
+#import "WebRequest.h"
+#import <vector>
+#import <map>
 
 /// <summary>
 /// <para>

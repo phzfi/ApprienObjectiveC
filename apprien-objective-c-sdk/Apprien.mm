@@ -1,6 +1,8 @@
+#import <sstream>
+#import <iostream>
 #import "Apprien.h"
-#include "sha256.h"
-#include "json.hpp"
+#import "sha256.h"
+#import "json.hpp"
 using namespace Apprien;
 
 using json = nlohmann::json;

@@ -1,12 +1,12 @@
 #import "WebRequest.h"
-#include <fstream>
+#import <fstream>
 
-#include <stdio.h>
+#import <stdio.h>
 #ifdef _WIN32
-#include <direct.h>
+#import <direct.h>
 #define GetCurrentDir _getcwd
 #else
-#include <unistd.h>
+#import <unistd.h>
 #define GetCurrentDir getcwd
 #endif
 

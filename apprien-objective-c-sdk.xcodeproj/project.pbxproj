@@ -48,7 +48,7 @@
 		8BFC211025E3985000900BDC /* apprien-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "apprien-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BFC211225E3985000900BDC /* apprien_tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apprien_tests.m; sourceTree = "<group>"; };
 		8BFC211425E3985000900BDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8BFC215A25E4F5AD00900BDC /* WebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebRequest.h; path = "apprien-objective-c-sdk/src/WebRequest.h"; sourceTree = SOURCE_ROOT; };
+		8BFC215A25E4F5AD00900BDC /* WebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebRequest.h; path = "apprien-objective-c-sdk/WebRequest.h"; sourceTree = SOURCE_ROOT; };
 		8BFC215B25E4F5AD00900BDC /* WebRequest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WebRequest.mm; path = "apprien-objective-c-sdk/WebRequest.mm"; sourceTree = SOURCE_ROOT; };
 		8BFC216D25E4F7C600900BDC /* FormDataSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDataSection.h; sourceTree = "<group>"; };
 		8BFC21D625E5204800900BDC /* Apprien.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Apprien.mm; sourceTree = "<group>"; };
@@ -108,6 +108,10 @@
 		8BFC210125E3976000900BDC /* apprien-objective-c-sdk */ = {
 			isa = PBXGroup;
 			children = (
+				8BFC21DD25E520E800900BDC /* sha256.h */,
+				8BFC21D725E5204800900BDC /* Apprien.h */,
+				8BFC215A25E4F5AD00900BDC /* WebRequest.h */,
+				8BFC216D25E4F7C600900BDC /* FormDataSection.h */,
 				8BFC21DC25E520E800900BDC /* sha256.mm */,
 				8BFC21D625E5204800900BDC /* Apprien.mm */,
 				8BFC215B25E4F5AD00900BDC /* WebRequest.mm */,
@@ -133,10 +137,6 @@
 		8BFC212325E3E9AF00900BDC /* src */ = {
 			isa = PBXGroup;
 			children = (
-				8BFC21DD25E520E800900BDC /* sha256.h */,
-				8BFC21D725E5204800900BDC /* Apprien.h */,
-				8BFC215A25E4F5AD00900BDC /* WebRequest.h */,
-				8BFC216D25E4F7C600900BDC /* FormDataSection.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -433,11 +433,19 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/apprien-tests/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/apprien-objective-c-sdk",
-					"$(PROJECT_DIR)/apprien-objective-c-sdk/src",
+					"$(inherited)",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.apprien.iapman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -456,6 +464,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/apprien-tests/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
