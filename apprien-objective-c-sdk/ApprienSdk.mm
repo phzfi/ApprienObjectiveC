@@ -14,10 +14,19 @@
 @synthesize REQUEST_TIMEOUT;
 @synthesize REST_GET_PRICE_URL;
 @synthesize REST_GET_ALL_PRICES_URL;
+@synthesize REST_GET_VALIDATE_TOKEN_URL;
 NSURLSession *sessionWithoutADelegate;
 Apprien::ApprienManager *apprienManager;
 
-
+-(id)init {
+     if (self = [super init])  {
+       self.REQUEST_TIMEOUT = 10;
+         self.REST_GET_PRICE_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
+         self.REST_GET_ALL_PRICES_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
+         self.REST_GET_VALIDATE_TOKEN_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
+              }
+     return self;
+}
 
 - (void)ApprienManager:(NSString *)gamePackageName integrationType:(NSInteger *) integrationType token:(NSString *)token {
     self.gamePackageName = gamePackageName;
@@ -31,11 +40,11 @@ Apprien::ApprienManager *apprienManager;
 }
 
 - (int)REQUEST_TIMEOUT {
-    return apprienManager->REQUEST_TIMEOUT;
+    return REQUEST_TIMEOUT;
 }
 
 - (void)setREQUEST_TIMEOUT:(int)newREQUEST_TIMEOUT {
-    apprienManager->REQUEST_TIMEOUT = newREQUEST_TIMEOUT;
+    REQUEST_TIMEOUT = newREQUEST_TIMEOUT;
 }
 
 - (NSString *)REST_GET_PRICE_URL {
