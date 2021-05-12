@@ -30,6 +30,9 @@ NSArray <NSString *> *testIAPids;
     testIAPids = @[@"test_product_1_sku", @"test_product_2_sku", @"test_product_3_sku", @"test_subscription_03", @"test_subscription_01"];
         NSString *path = [NSHomeDirectory() stringByAppendingString:@"/workspace/github/ApprienObjectiveC/token.txt"];
         token =[NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        if (token == nil) {
+            token = @"";
+        }
     ApprienProduct *apprienProduct = [[ApprienProduct alloc] initWithBaseIapId:defaultIAPid];
 
     products = [apprienProduct FromIAPCatalog:testIAPids];
@@ -57,9 +60,9 @@ NSArray <NSString *> *testIAPids;
 }
 
 - (void)testSettingAndGettingToken {
-    NSString *tokenName = [apprienSdk token];
+    NSString *tokenName = apprienSdk.token;
     XCTAssertTrue([token isEqual:tokenName] == TRUE);
-    [apprienSdk setToken:@"testToken"];
+    apprienSdk.token = @"testToken";
     tokenName = [apprienSdk token];
     XCTAssertTrue([@"testToken" isEqual:tokenName] == TRUE);
 }
