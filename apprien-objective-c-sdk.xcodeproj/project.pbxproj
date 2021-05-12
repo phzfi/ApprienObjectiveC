@@ -38,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		06945E19FF10F59D8066F1E6 /* Pods-apprien-objective-c-sdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.debug.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.debug.xcconfig"; sourceTree = "<group>"; };
-		0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_apprien_objective_c_sdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B182BED67977C3E8D5C5384 /* ApprienProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApprienProduct.m; sourceTree = "<group>"; };
 		1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApprienProduct.h; sourceTree = "<group>"; };
 		572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.release.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.release.xcconfig"; sourceTree = "<group>"; };
@@ -80,7 +79,6 @@
 		1E263B664A253575BC559B24 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0E2E3EBA3447B9438993DBC2 /* Pods_apprien_objective_c_sdk.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

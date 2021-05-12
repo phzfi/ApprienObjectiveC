@@ -42,7 +42,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Define the store ApprienManager should integrate against, e.g. GooglePlayStore
 */
-- (int)integrationType;
+@property(nonatomic) NSInteger *integrationType;
 
 /*!
  @abstract Logs raw information about request results

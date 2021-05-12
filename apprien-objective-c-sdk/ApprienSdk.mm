@@ -11,35 +11,23 @@
 
 @implementation ApprienSdk : NSObject
 @synthesize DEBUGGING_ENABLED;
-@synthesize token;
 @synthesize REQUEST_TIMEOUT;
 @synthesize REST_GET_PRICE_URL;
 @synthesize REST_GET_ALL_PRICES_URL;
 NSURLSession *sessionWithoutADelegate;
 Apprien::ApprienManager *apprienManager;
 
-- (void)ApprienManager:(NSString *)gamePackageName integrationType:(int)integrationType token:(NSString *)token {
-    apprienManager = new Apprien::ApprienManager([gamePackageName UTF8String], static_cast<Apprien::ApprienIntegrationType>(integrationType), [token UTF8String]);
-}
 
-- (NSString *)gamePackageName {
-    return [NSString stringWithCString:apprienManager->gamePackageName.c_str()
-                              encoding:[NSString defaultCStringEncoding]];
+
+- (void)ApprienManager:(NSString *)gamePackageName integrationType:(NSInteger *) integrationType token:(NSString *)token {
+    self.gamePackageName = gamePackageName;
+    self.integrationType = integrationType;
+    self.token = token;
 }
 
 - (NSString *)deviceUniqueIdentifier {
     return [NSString stringWithCString:apprienManager->deviceUniqueIdentifier.c_str()
                               encoding:[NSString defaultCStringEncoding]];
-}
-
-
-- (NSString *)token {
-    return [NSString stringWithCString:apprienManager->token.c_str()
-                              encoding:[NSString defaultCStringEncoding]];
-}
-
-- (void)setToken:(NSString *)newToken {
-    apprienManager->token = newToken.UTF8String;
 }
 
 - (int)REQUEST_TIMEOUT {
@@ -64,10 +52,6 @@ Apprien::ApprienManager *apprienManager;
 
 - (void)setREST_GET_ALL_PRICES_URL:(NSString *)new_REST_GET_ALL_PRICE_URL {
     apprienManager->REST_GET_ALL_PRICES_URL = new_REST_GET_ALL_PRICE_URL.UTF8String;
-}
-
-- (int)integrationType {
-    return static_cast<int>(apprienManager->integrationType);
 }
 
 - (NSString *)REST_GET_APPRIEN_STATUS {
