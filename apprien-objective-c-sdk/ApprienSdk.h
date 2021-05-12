@@ -42,7 +42,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Define the store ApprienManager should integrate against, e.g. GooglePlayStore
 */
-@property(nonatomic) NSInteger *integrationType;
+@property(nonatomic) NSInteger *IntegrationType;
 
 /*!
  @abstract Logs raw information about request results
@@ -57,12 +57,12 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Apprien REST API endpoint for testing the availability of the service
 */
-- (NSString *)REST_GET_APPRIEN_STATUS;
+@property(nonatomic) NSString *REST_GET_APPRIEN_STATUS;
 
 /*!
  @abstract Apprien REST API endpoint for testing the validity of the given token
 */
-- (NSString *)REST_GET_VALIDATE_TOKEN_URL;
+@property(nonatomic) NSString *REST_GET_VALIDATE_TOKEN_URL;
 
 /*!
  @abstract Apprien REST API endpoint for fetching all optimum product variants
@@ -77,24 +77,24 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Apprien REST API endpoint for POSTing the receipt json for successful transactions
 */
-- (NSString *)REST_POST_RECEIPT_URL;
+@property(nonatomic) NSString *REST_POST_RECEIPT_URL;
 
 - (NSArray<ApprienProduct*> *)CopyApprienProductsFromData: data: (NSData *) data;
 
 /*!
  @abstract Apprien REST API endpoint for POSTing the receipt json for successful transactions
 */
-- (NSString *)REST_POST_ERROR_URL;
+@property(nonatomic) NSString *REST_POST_ERROR_URL;
 
 /*!
  @abstract Apprien REST API endpoint for POSTing a notice to Apprien that product was shown.
 */
-- (NSString *)REST_POST_PRODUCTS_SHOWN_URL;
+@property(nonatomic) NSString *REST_POST_PRODUCTS_SHOWN_URL;
 
 /*!
  @abstract Gets the store's string identifier for the currently set ApprienIntegrationType
 */
-- (NSString *)StoreIdentifier;
+@property(nonatomic) NSString *StoreIdentifier;
 
 /*!
  @abstract Returns the first byte of MD5-hashed DeviceUniqueIdentifier as string (two symbols).

@@ -15,8 +15,13 @@
 @synthesize REST_GET_PRICE_URL;
 @synthesize REST_GET_ALL_PRICES_URL;
 @synthesize REST_GET_VALIDATE_TOKEN_URL;
+@synthesize REST_POST_RECEIPT_URL;
+@synthesize REST_POST_PRODUCTS_SHOWN_URL;
+@synthesize IntegrationType;
+
 NSURLSession *sessionWithoutADelegate;
 Apprien::ApprienManager *apprienManager;
+NSArray *integrationTypes;
 
 -(id)init {
      if (self = [super init])  {
@@ -24,7 +29,12 @@ Apprien::ApprienManager *apprienManager;
          self.REST_GET_PRICE_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
          self.REST_GET_ALL_PRICES_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
          self.REST_GET_VALIDATE_TOKEN_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
-              }
+         self.REST_GET_APPRIEN_STATUS = @"http://game.apprien.com/status";
+         self.REST_POST_ERROR_URL = @"http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
+         self.REST_POST_RECEIPT_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
+         self.REST_POST_PRODUCTS_SHOWN_URL = @"http://game.apprien.com/api/v1/stores/%s/shown/products";
+         integrationTypes =  [NSArray arrayWithObjects: @"google", @"apple", nil];
+     }
      return self;
 }
 
@@ -47,45 +57,9 @@ Apprien::ApprienManager *apprienManager;
     REQUEST_TIMEOUT = newREQUEST_TIMEOUT;
 }
 
-- (NSString *)REST_GET_PRICE_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_GET_PRICE_URL];
-}
-
-- (void)setREST_GET_PRICE_URL:(NSString *)new_REST_GET_PRICE_URL {
-    apprienManager->REST_GET_PRICE_URL = new_REST_GET_PRICE_URL.UTF8String;
-}
-
-- (NSString *)REST_GET_ALL_PRICES_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_GET_ALL_PRICES_URL];
-}
-
-- (void)setREST_GET_ALL_PRICES_URL:(NSString *)new_REST_GET_ALL_PRICE_URL {
-    apprienManager->REST_GET_ALL_PRICES_URL = new_REST_GET_ALL_PRICE_URL.UTF8String;
-}
-
-- (NSString *)REST_GET_APPRIEN_STATUS {
-    return [NSString stringWithUTF8String:apprienManager->REST_GET_APPRIEN_STATUS];
-}
-
-- (NSString *)REST_GET_VALIDATE_TOKEN_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_GET_VALIDATE_TOKEN_URL];
-}
-
-- (NSString *)REST_POST_RECEIPT_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_POST_RECEIPT_URL];
-}
-
-- (NSString *)REST_POST_ERROR_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_POST_ERROR_URL];
-}
-
-- (NSString *)REST_POST_PRODUCTS_SHOWN_URL {
-    return [NSString stringWithUTF8String:apprienManager->REST_POST_PRODUCTS_SHOWN_URL];
-}
 
 - (NSString *)StoreIdentifier {
-    return [NSString stringWithCString:apprienManager->StoreIdentifier().c_str()
-                              encoding:[NSString defaultCStringEncoding]];
+    return integrationTypes[self.IntegrationType];
 }
 
 

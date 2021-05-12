@@ -126,41 +126,7 @@ namespace Apprien {
         /// Sends error message when Apprien encounter any problems
         /// </summary>
         void CatchAndSendRequestError();
-        
-        /// <summary>
-        /// Apprien REST API endpoint for testing the availability of the service
-        /// </summary>
-        const char *REST_GET_APPRIEN_STATUS = "http://game.apprien.com/status";
 
-        /// <summary>
-        /// Apprien REST API endpoint for testing the validity of the given token
-        /// </summary>
-        const char *REST_GET_VALIDATE_TOKEN_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
-
-        /// <summary>
-        /// Apprien REST API endpoint for fetching all optimum product variants
-        /// </summary>
-        const char *REST_GET_ALL_PRICES_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
-
-        /// <summary>
-        /// Apprien REST API endpoint for fetching the optimum product variant for a single product
-        /// </summary>
-        const char *REST_GET_PRICE_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
-
-        /// <summary>
-        /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
-        /// </summary>
-        const char *REST_POST_RECEIPT_URL = "http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
-
-        /// <summary>
-        /// Apprien REST API endpoint for POSTing the receipt json for successful transactions
-        /// </summary>
-        const char *REST_POST_ERROR_URL = "http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
-
-        /// <summary>
-        /// Apprien REST API endpoint for POSTing a notice to Apprien that product was shown.
-        /// </summary>
-        const char *REST_POST_PRODUCTS_SHOWN_URL = "http://game.apprien.com/api/v1/stores/%s/shown/products";
 
         /// <summary>
         /// Gets the store's string identifier for the currently set ApprienIntegrationType
