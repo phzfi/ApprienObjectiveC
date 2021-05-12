@@ -1,8 +1,6 @@
 
 #import "FormDataSection.h"
 #import <Foundation/Foundation.h>
-#import <list>
-
 
 /// <summary>
 /// The WebRequest class is used to communicate with web servers.
@@ -13,7 +11,7 @@ private:
 
     struct curl_slist *chunk = NULL;
 
-    NSMutableURLRequest *Initialize(std::string url, NSString* httpMethod);
+    NSMutableURLRequest *Initialize(NSString *url, NSString* httpMethod);
 
 public:
     /// <summary>
@@ -29,7 +27,7 @@ public:
     /// <summary>
     /// Human readable error string that may offer more details about the cause of the error code.
     /// </summary>
-    std::string errorMessage = "";
+    NSString *errorMessage = @"";
 
     /// <summary>
     /// Get session.
@@ -49,22 +47,22 @@ public:
     /// <summary>
     /// Set a custom value to HTTP request header.
     /// </summary>
-    void SetRequestHeader(std::string name, std::string  value);
+    void SetRequestHeader(NSString *name, NSString *value);
 
     /// <summary>
     /// Create a WebRequest for HTTP GET.
     /// </summary>
-    NSMutableURLRequest *Get(std::string url);
+    NSMutableURLRequest *Get(NSString *url);
 
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.
     /// </summary>
-    NSURLSessionUploadTask *Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack);
+    NSURLSessionUploadTask *Post(NSString *url, NSMutableArray<FormDataSection*>* formSections, std::function<void(int response, int errorCode)> callBack);
 
     /// <summary>
     /// Create a WebRequest configured to send post data to a server via HTTP POST.
     /// </summary>
-    NSURLSessionUploadTask *Post(std::string url, const char *postData = nullptr);
+    NSURLSessionUploadTask *Post(NSString * url, const char *postData = nullptr);
 
     int HandleResponse(NSURLResponse *response, NSError *error) const;
 };

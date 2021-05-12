@@ -1,25 +1,23 @@
+//
+//  FormDataSection.h
+//  apprien-objective-c-sdk
+//
+//  Created by phz on 12.5.2021.
+//
 
-#import <string>
+#ifndef FormDataSection_h
+#define FormDataSection_h
+@interface FormDataSection : NSObject
 
-class FormDataSection
-{
-public:
-    /// <summary>
-    /// The section's name.
-    /// </summary>
-    std::string Name;
-    /// <summary>
-    /// Binary data contained in this section.
-    /// </summary>
-    const char *Data;
-    FormDataSection()
-    {
-        Name = "";
-        Data = "";
-    }
-    FormDataSection(std::string name, const char *data)
-    {
-        Name = name;
-        Data = data;
-    }
-};
+/*!
+ @abstract The section's name.
+*/
+@property(nonatomic) NSString *Name;
+
+/*!
+ @abstract Binary data contained in this section.
+*/
+@property(nonatomic) char *Data;
+
+@end
+#endif /* FormDataSection_h */

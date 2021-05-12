@@ -72,9 +72,12 @@ std::string Apprien::ApprienManager::BuildUrl(const char* address){
 }
 
 void Apprien::ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
-    auto formData = std::list<FormDataSection>();
-    std::list<FormDataSection>::iterator it = formData.begin();
-    formData.insert(it, FormDataSection("receipt", receiptJson.c_str()));
+    
+    NSMutableArray<FormDataSection*>*formDataArray = [[NSMutableArray<FormDataSection*> alloc] init];
+    FormDataSection *data = [[FormDataSection alloc] init];
+    data.Name = @"receipt";
+    data.Data =receiptJson.c_str();
+    [formDataArray addObject:data]
 
     char url[5000];
     auto request = WebRequest();

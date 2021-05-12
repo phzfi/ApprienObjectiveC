@@ -39,7 +39,6 @@ NSURLSessionUploadTask *uploadTask;
 
 NSMutableURLRequest *WebRequest::Initialize(std::string url, NSString* httpMethod)
 {
-   // auto certFile = WorkingDir() + Separator() + CURL_CA_BUNDLE;
     if(session == nil){
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         session = [NSURLSession sessionWithConfiguration:config];
@@ -123,14 +122,15 @@ NSURLSession *WebRequest::GetSession(){
     return session;
 }
 
-NSURLSessionUploadTask *WebRequest::Post(std::string url, std::list<FormDataSection> formSections, std::function<void(int response, int errorCode)> callBack)
+NSURLSessionUploadTask *WebRequest::Post(std::string url, NSMutableArray<FormDataSection*>* formSections, std::function<void(int response, int errorCode)> callBack)
 {
     Initialize(url, @"POST");
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];;
     
-    for (auto item : formSections)
+    for (FormDataSection *item : formSections)
     {
-        [dictionary setObject:[NSString stringWithCString: item.Data encoding:NSString.defaultCStringEncoding ] forKey:[NSString stringWithCString: item.Name.c_str() encoding:NSString.defaultCStringEncoding ] ];
+        NSString *name = item.Name;
+        [dictionary setObject:[NSString stringWithCString: item.Data encoding:NSString.defaultCStringEncoding ] forKey: name];
     }
     
     NSError *error = nil;
