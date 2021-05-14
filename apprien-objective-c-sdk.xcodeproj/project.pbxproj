@@ -132,7 +132,7 @@
 				8BFC211425E3985000900BDC /* Info.plist */,
 			);
 			path = "apprien-tests";
-			sourceTree = SOURCE_ROOT;
+			sourceTree = "<group>";
 		};
 		8BFC212325E3E9AF00900BDC /* src */ = {
 			isa = PBXGroup;

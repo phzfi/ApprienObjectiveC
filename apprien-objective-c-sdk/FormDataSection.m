@@ -6,5 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FormDataSection.h"
 @implementation FormDataSection : NSObject
 @end

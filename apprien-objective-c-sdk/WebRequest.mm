@@ -17,7 +17,7 @@
          self.isDone = false;
          self.responseCode = -1;
          self.errorMessage = @"";
-         self.CURL_CA_BUNDLE = "curl-ca-bundle.crt";
+         self.CURL_CA_BUNDLE = @"curl-ca-bundle.crt";
      }
      return self;
 }
@@ -118,10 +118,8 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
 
 -(void) SetRequestHeader:(NSString *)name value: (NSString *)value
 {
-  
-    NSString *headerName = [NSString stringWithCString: name.c_str() encoding:NSString.defaultCStringEncoding];
-    NSString *headerValue = [NSString stringWithCString: value.c_str() encoding:NSString.defaultCStringEncoding];
-      
+    NSString *headerName = name;
+    NSString *headerValue = value;
     
     [request addValue:headerValue forHTTPHeaderField:headerName];
 }
@@ -148,7 +146,7 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
     
     if (!error) {
         uploadTask = [session uploadTaskWithRequest:request fromData:data completionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
-            int responseCode = HandleResponse(response, error);
+            int responseCode = 0;//HandleResponse(response, error);
             callBack(responseCode, (int)error.code);
         }];
     }

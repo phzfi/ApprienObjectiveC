@@ -30,15 +30,15 @@ void from_json(const json &j, ApprienProductListProduct &sb) {
 /// </summary>
 class ApprienProductList {
 public:
-    std::list<ApprienProductListProduct> products;
+   // std::list<ApprienProductListProduct> products;
 };
 
 void SendError(int code, std::basic_string<char, std::char_traits<char>, std::allocator<char>> basicString);
 
 void from_json(const json &j, ApprienProductList &s) {
-    const json &sj = j.at("products");
-    s.products.resize(sj.size());
-    std::copy(sj.begin(), sj.end(), s.products.begin());
+   // const json &sj = j.at("products");
+    //s.products.resize(sj.size());
+    //std::copy(sj.begin(), sj.end(), s.products.begin());
 }
 
 std::string Apprien::ApprienManager::ApprienIdentifier() {
@@ -55,40 +55,33 @@ void ApprienManager::CatchAndSendRequestError() {
 }
 
 void ApprienManager::SendError(int responseCode, std::string errorMessage) {
-    char url[5000];
+  /*  char url[5000];
     auto request = WebRequest();
     std::string code = std::to_string(responseCode);
     std::snprintf(url, sizeof(url), REST_POST_ERROR_URL, errorMessage.c_str(), code.c_str(), gamePackageName.c_str(), StoreIdentifier().c_str());
    // request.Get(url, std::function<void(WebRequest)>());
-    request.SendWebRequest();
+    request.SendWebRequest();*/
 }
 
-
-
-std::string Apprien::ApprienManager::BuildUrl(const char* address){
-    char url[5000];
-    snprintf(url, sizeof(url), address, StoreIdentifier().c_str(), gamePackageName.c_str());
-    return url;
-}
 
 void Apprien::ApprienManager::PostReceipt(std::string receiptJson, std::function<void(int response, int errorCode)> callback) {
-    
+    /*
     NSMutableArray<FormDataSection*>*formDataArray = [[NSMutableArray<FormDataSection*> alloc] init];
     FormDataSection *data = [[FormDataSection alloc] init];
     data.Name = @"receipt";
-    data.Data =receiptJson.c_str();
+   // data.Data =receiptJson.c_str();
     [formDataArray addObject:data]
 
     char url[5000];
-    auto request = WebRequest();
+   // auto request = WebRequest();
     snprintf(url, sizeof(url), REST_POST_RECEIPT_URL, StoreIdentifier().c_str(), gamePackageName.c_str());
     request.Post(url, formData, callback);
     request.SetRequestHeader("Authorization:", "Bearer " + token);
-    request.SendWebRequest();
+    request.SendWebRequest();*/
 }
 
 void Apprien::ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienProducts, std::function<void(int response, int errorCode)> callback) {
-    auto formData = std::list<FormDataSection>();
+    /* auto formData = std::list<FormDataSection>();
     std::list<FormDataSection>::iterator it = formData.begin();
     for (unsigned int i = 0; i < apprienProducts.size(); i++) {
         std::ostringstream oss;
@@ -105,24 +98,9 @@ void Apprien::ApprienManager::ProductsShown(std::vector<ApprienProduct> apprienP
 
     if (request.responseCode != 0) {
         SendError(request.responseCode, "Error occured while posting products shown: HTTP error: " + request.errorMessage);
-    }
+    }*/
 }
 
-std::string Apprien::ApprienManager::GetBaseIAPId(std::string storeIAPId) {
-    // Default result to (base) storeIapId
-    auto result = storeIAPId;
-
-    // First check if this is a variant IAP id or base IAP id
-    std::size_t apprienSeparatorPosition = result.find(".apprien_");
-    if (apprienSeparatorPosition != std::string::npos) {
-        // Get the base IAP id part, remove the suffix
-        result = result.substr(0, apprienSeparatorPosition);
-
-        // Remove prefix
-        result = result.substr(2);
-    }
-    return result;
-}
 
 std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::ApprienProduct::FromIAPCatalog(std::vector<std::string> catalog) {
     auto apprienProducts = std::vector<ApprienProduct>();
@@ -136,7 +114,7 @@ std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::ApprienProd
 /// </summary>
 std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::GetProducts(char *data) {
     std::vector<ApprienManager::ApprienProduct> products;
-    auto productLookup = new std::map<std::string, ApprienManager::ApprienProduct>();
+    /*auto productLookup = new std::map<std::string, ApprienManager::ApprienProduct>();
     try {
         json j = json::parse(data);
         ApprienProductList productList = j;
@@ -149,12 +127,12 @@ std::vector<ApprienManager::ApprienProduct> Apprien::ApprienManager::GetProducts
             }
         }
     }
-    catch (const std::exception &e) // If the JSON cannot be parsed, products will be using default IAP ids*/
+    catch (const std::exception &e) // If the JSON cannot be parsed, products will be using default IAP ids
     {
         std::cout << e.what();
     }
 
-    delete (productLookup);
+    delete (productLookup);*/
     return products;
 }
 

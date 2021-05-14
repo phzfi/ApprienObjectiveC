@@ -76,12 +76,12 @@ NSArray <NSString *> *testIAPids;
 - (void)testSettingIntegrationType {
     @autoreleasepool {
         //Default is google set in the setup function
-        XCTAssertTrue(apprienSdk.integrationType == GooglePlayStore);
+        XCTAssertTrue(apprienSdk.IntegrationType == GooglePlayStore);
         apprienSdk = nil;
         const ApprienIntegrationType appleIntegration = AppleAppStore;
         apprienSdk = [[ApprienSdk alloc] init];
         [apprienSdk ApprienManager:testPackageName integrationType:appleIntegration token:token];
-        const ApprienIntegrationType resultIntegrationType = apprienSdk.integrationType;
+        const ApprienIntegrationType resultIntegrationType = apprienSdk.IntegrationType;
         XCTAssertTrue(resultIntegrationType == appleIntegration);
     }
 }
@@ -133,7 +133,7 @@ NSArray <NSString *> *testIAPids;
 }
 
 - (void)testDeviceUniqueIdentifier {
-    NSString *result = [apprienSdk deviceUniqueIdentifier];
+    NSString *result = [apprienSdk DeviceUniqueIdentifier];
     XCTAssertTrue([result isEqualTo:@""]);
 }
 

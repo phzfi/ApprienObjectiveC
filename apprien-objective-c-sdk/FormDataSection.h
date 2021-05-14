@@ -7,6 +7,7 @@
 
 #ifndef FormDataSection_h
 #define FormDataSection_h
+#import <Foundation/Foundation.h>
 @interface FormDataSection : NSObject
 
 /*!
