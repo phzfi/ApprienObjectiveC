@@ -32,7 +32,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract A unique device identifier. It is guaranteed to be unique for every device.
 */
-@property(nonatomic) NSString *deviceUniqueIdentifier;
+@property(nonatomic) NSString *DeviceUniqueIdentifier;
 
 /*!
  @abstract OAuth2 token received from Apprien Dashboard.
@@ -42,7 +42,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Define the store ApprienManager should integrate against, e.g. GooglePlayStore
 */
-@property(nonatomic) NSInteger *IntegrationType;
+@property(nonatomic) NSUInteger *IntegrationType;
 
 /*!
  @abstract Logs raw information about request results

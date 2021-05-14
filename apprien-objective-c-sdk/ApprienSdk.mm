@@ -6,8 +6,8 @@
 //
 
 #import "ApprienSdk.h"
-#import "Apprien.h"
 #import "ApprienProduct.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation ApprienSdk : NSObject
 @synthesize DEBUGGING_ENABLED;
@@ -18,9 +18,9 @@
 @synthesize REST_POST_RECEIPT_URL;
 @synthesize REST_POST_PRODUCTS_SHOWN_URL;
 @synthesize IntegrationType;
+@synthesize DeviceUniqueIdentifier;
 
 NSURLSession *sessionWithoutADelegate;
-Apprien::ApprienManager *apprienManager;
 NSArray *integrationTypes;
 
 -(id)init {
@@ -33,14 +33,15 @@ NSArray *integrationTypes;
          self.REST_POST_ERROR_URL = @"http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
          self.REST_POST_RECEIPT_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
          self.REST_POST_PRODUCTS_SHOWN_URL = @"http://game.apprien.com/api/v1/stores/%s/shown/products";
+         self.DeviceUniqueIdentifier = @"";
          integrationTypes =  [NSArray arrayWithObjects: @"google", @"apple", nil];
      }
      return self;
 }
 
-- (void)ApprienManager:(NSString *)gamePackageName integrationType:(NSInteger *) integrationType token:(NSString *)token {
+- (void)ApprienManager:(NSString *)gamePackageName integrationType:(NSUInteger *) integrationType token:(NSString *)token {
     self.gamePackageName = gamePackageName;
-    self.integrationType = integrationType;
+    self.IntegrationType = integrationType;
     self.token = token;
 }
 
@@ -59,14 +60,34 @@ NSArray *integrationTypes;
 
 
 - (NSString *)StoreIdentifier {
-    return integrationTypes[self.IntegrationType];
+    return [integrationTypes objectAtIndex: (NSUInteger)self.IntegrationType];
 }
-
 
 - (NSString *)ApprienIdentifier {
-    return [NSString stringWithCString:apprienManager->ApprienIdentifier().c_str()
-                              encoding:[NSString defaultCStringEncoding]];
+    //TODO: aprrien identifier and device unique identifier
+    return [self.sha256HashFor self.DeviceUniqueIdentifier];
 }
+
+-(NSString*)sha256HashFor:(NSString*)input
+{
+    NSData* data = [input dataUsingEncoding:NSUTF8StringEncoding];
+    NSMutableData *sha256Data = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256([data bytes], (CC_LONG)[data length], [sha256Data mutableBytes]);
+    return [sha256Data base64EncodedStringWithOptions:0];
+}
+
+-(NSString*)Sha256HashForText:(NSString*)text {
+    const char* utf8chars = [text UTF8String];
+    unsigned char result[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(utf8chars, (CC_LONG)strlen(utf8chars), result);
+
+    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
+    for(int i = 0; i<CC_SHA256_DIGEST_LENGTH; i++) {
+        [ret appendFormat:@"%02x",result[i]];
+    }
+    return ret;
+}
+
 
 - (void)TestConnection:(void (^)(BOOL statusCheck, BOOL tokenCheck))callback {
 
@@ -80,7 +101,7 @@ NSArray *integrationTypes;
 
 - (void)CheckServiceStatus: (void (^)(BOOL serviceOk))callback {
     auto request = WebRequest();
-    NSMutableURLRequest * requestTask = request.Get(apprienManager->REST_GET_APPRIEN_STATUS);
+    NSMutableURLRequest * requestTask = request.Get(self.REST_GET_APPRIEN_STATUS);
 
     [[request.GetSession() dataTaskWithRequest:requestTask completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
@@ -183,35 +204,4 @@ NSArray *integrationTypes;
         return [self CopyApprienProductsFromCPPToObjC:products];
     }
 }
-
-- (std::vector<Apprien::ApprienManager::ApprienProduct> &)CopyApprienProductsFromObjCToCPP:(NSArray *)apprienProducts apprienProductsC:(std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
-    @autoreleasepool {
-        int size = (int) [apprienProducts count];
-        for (int i = 0; i < size; i++) {
-            Apprien::ApprienManager::ApprienProduct apprienProduct;
-            ApprienProduct *p = apprienProducts[i];
-            apprienProduct.store = p.store.UTF8String;
-            apprienProduct.baseIAPId = p.baseIAPId.UTF8String;
-            apprienProduct.apprienVariantIAPId = p.apprienVariantIAPId.UTF8String;
-            apprienProductsC.push_back(apprienProduct);
-        }
-        return apprienProductsC;
-    }
-}
-
-- (NSMutableArray *)CopyApprienProductsFromCPPToObjC:(const std::vector<Apprien::ApprienManager::ApprienProduct> &)apprienProductsC {
-    @autoreleasepool {
-        int size = (int)sizeof(apprienProductsC)/sizeof(apprienProductsC[0]);
-        NSMutableArray<ApprienProduct*> *apprienProducts = [[NSMutableArray<ApprienProduct*> alloc]init];
-        for (int i = 0; i < size; i++) {
-            ApprienProduct *product =  [[ApprienProduct alloc]init];
-            product.store = [NSString stringWithCString:apprienProductsC[i].store.c_str() encoding:[NSString defaultCStringEncoding]];
-            product.baseIAPId = [NSString stringWithCString:apprienProductsC[i].baseIAPId.c_str() encoding:[NSString defaultCStringEncoding]];
-            product.apprienVariantIAPId = [NSString stringWithCString:apprienProductsC[i].apprienVariantIAPId.c_str() encoding:[NSString defaultCStringEncoding]];
-            [apprienProducts addObject:product];
-        }
-        return apprienProducts;
-    }
-}
-
 @end

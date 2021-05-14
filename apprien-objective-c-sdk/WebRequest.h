@@ -5,65 +5,60 @@
 /// <summary>
 /// The WebRequest class is used to communicate with web servers.
 /// </summary>
-class WebRequest
-{
-private:
+@interface WebRequest : NSObject
 
-    struct curl_slist *chunk = NULL;
-
-    NSMutableURLRequest *Initialize(NSString *url, NSString* httpMethod);
-
-public:
     /// <summary>
     /// Value is true after the WebRequest has finished communicating with the remote.
     /// </summary>
-    bool isDone = false;
+    @property(nonatomic) bool isDone;
 
     /// <summary>
     /// The numeric error code returned by the WebRequest.
     /// </summary>
-    int responseCode = -1;
+    @property(nonatomic) int responseCode;
 
     /// <summary>
     /// Human readable error string that may offer more details about the cause of the error code.
     /// </summary>
-    NSString *errorMessage = @"";
-
-    /// <summary>
-    /// Get session.
-    /// </summary>
-    NSURLSession *GetSession();
+    @property(nonatomic) NSString *errorMessage;
 
     /// <summary>
     /// Certificate Authority bundle file.
     /// </summary>
-    const char *CURL_CA_BUNDLE = "curl-ca-bundle.crt";
+    @property(nonatomic) NSString *CURL_CA_BUNDLE;
+
+    /// <summary>
+    /// Get session.
+    /// </summary>
+    @property(nonatomic) NSURLSession *GetSession;
+
+    -(NSMutableURLRequest *)Initialize: (NSString *)url httpMethod: (NSString*) httpMethod;
 
     /// <summary>
     /// Begin communicating with the remote server.
     /// </summary>
-    bool SendWebRequest(std::function<void(char *)> callback = nullptr);
+    -(bool) SendWebRequest: (void (^)(char *data)) callback;
 
     /// <summary>
     /// Set a custom value to HTTP request header.
     /// </summary>
-    void SetRequestHeader(NSString *name, NSString *value);
+    -(void) SetRequestHeader:(NSString *)name value: (NSString *)value;
 
     /// <summary>
     /// Create a WebRequest for HTTP GET.
     /// </summary>
-    NSMutableURLRequest *Get(NSString *url);
+    -(NSMutableURLRequest *)Get: (NSString *)url;
 
     /// <summary>
     /// Create a WebRequest configured to send form data to a server via HTTP POST.
     /// </summary>
-    NSURLSessionUploadTask *Post(NSString *url, NSMutableArray<FormDataSection*>* formSections, std::function<void(int response, int errorCode)> callBack);
+    -(NSURLSessionUploadTask *)Post: (NSString *)url dataFormSections: (NSMutableArray<FormDataSection*>*) formSections callBack: (void (^)(int response, int errorCode)) callBack;
 
     /// <summary>
     /// Create a WebRequest configured to send post data to a server via HTTP POST.
     /// </summary>
-    NSURLSessionUploadTask *Post(NSString * url, const char *postData = nullptr);
+    -(NSURLSessionUploadTask *)Post:(NSString *) url postData: (const char *)postData;
 
-    int HandleResponse(NSURLResponse *response, NSError *error) const;
-};
+    -(int) HandleResponse:(NSURLResponse *)response error: (NSError *)error;
+@end
 

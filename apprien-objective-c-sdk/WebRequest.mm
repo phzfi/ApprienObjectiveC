@@ -10,6 +10,22 @@
 #define GetCurrentDir getcwd
 #endif
 
+@implementation WebRequest : NSObject
+
+-(id)init {
+     if (self = [super init])  {
+         self.isDone = false;
+         self.responseCode = -1;
+         self.errorMessage = @"";
+         self.CURL_CA_BUNDLE = "curl-ca-bundle.crt";
+     }
+     return self;
+}
+NSMutableURLRequest *request;
+NSURLSession *session;
+NSURLSessionDataTask *dataTask;
+NSURLSessionUploadTask *uploadTask;
+
 inline char Separator()
 {
 #ifdef _WIN32
@@ -32,26 +48,23 @@ inline bool FileExists(const std::string &name)
     return f.good();
 }
 
-NSMutableURLRequest *request;
-NSURLSession *session;
-NSURLSessionDataTask *dataTask;
-NSURLSessionUploadTask *uploadTask;
 
-NSMutableURLRequest *WebRequest::Initialize(std::string url, NSString* httpMethod)
+
+-(NSMutableURLRequest *)Initialize: (NSString *)url httpMethod: (NSString*) httpMethod
 {
     if(session == nil){
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         session = [NSURLSession sessionWithConfiguration:config];
     }
     
-    NSURL *nsurl = [NSURL URLWithString:[NSString stringWithCString:url.c_str() encoding:NSString.defaultCStringEncoding]];
+    NSURL *nsurl = [NSURL URLWithString:url];
     request = [[NSMutableURLRequest alloc] initWithURL:nsurl];
     request.HTTPMethod = httpMethod;
     
     return request;
 }
  
- void URLSession(NSURLSession * session, NSURLAuthenticationChallenge *challenge, NSString *path, std::function<void(NSURLSessionAuthChallengeDisposition, NSURLCredential *)> completionHandler )
+ -(void) URLSession:(NSURLSession *)session challenge:( NSURLAuthenticationChallenge *)challenge path: (NSString *)path callback: (void (^)(NSURLSessionAuthChallengeDisposition response, NSURLCredential *errorCode)) callback
 {
     SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
     SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
@@ -64,12 +77,12 @@ NSMutableURLRequest *WebRequest::Initialize(std::string url, NSString* httpMetho
     {
         NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
         [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+        callback(NSURLSessionAuthChallengeUseCredential, credential);
     }
     else
     {
         [[challenge sender] cancelAuthenticationChallenge:challenge];
-        completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
+        callback(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
     }
 }
 
@@ -84,7 +97,7 @@ size_t RequestCallback(char *buffer, size_t size, size_t nitems, void *data)
     return size * nitems;
 }
 
-bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
+-(bool) SendWebRequest: (void (^)(char *data)) callback
 {
     if(dataTask){
         OnWebRequest = callback;
@@ -103,7 +116,7 @@ bool WebRequest::SendWebRequest(std::function<void(char *)> callback)
     return false;
 }
 
-void WebRequest::SetRequestHeader(std::string name, std::string  value)
+-(void) SetRequestHeader:(NSString *)name value: (NSString *)value
 {
   
     NSString *headerName = [NSString stringWithCString: name.c_str() encoding:NSString.defaultCStringEncoding];
@@ -113,21 +126,17 @@ void WebRequest::SetRequestHeader(std::string name, std::string  value)
     [request addValue:headerValue forHTTPHeaderField:headerName];
 }
 
-NSMutableURLRequest *WebRequest::Get(std::string url)
+-(NSMutableURLRequest *)Get: (NSString *)url
 {
-    return Initialize(url, @"GET");
+    return [self Initialize: url httpMethod: @"GET"];
 }
 
-NSURLSession *WebRequest::GetSession(){
-    return session;
-}
-
-NSURLSessionUploadTask *WebRequest::Post(std::string url, NSMutableArray<FormDataSection*>* formSections, std::function<void(int response, int errorCode)> callBack)
+-(NSURLSessionUploadTask *)Post: (NSString *)url dataFormSections: (NSMutableArray<FormDataSection*>*) formSections callBack: (void (^)(int response, int errorCode)) callBack
 {
-    Initialize(url, @"POST");
+    [self Initialize:url httpMethod: @"POST"];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];;
     
-    for (FormDataSection *item : formSections)
+    for (FormDataSection *item  in formSections)
     {
         NSString *name = item.Name;
         [dictionary setObject:[NSString stringWithCString: item.Data encoding:NSString.defaultCStringEncoding ] forKey: name];
@@ -146,7 +155,7 @@ NSURLSessionUploadTask *WebRequest::Post(std::string url, NSMutableArray<FormDat
     return uploadTask;
 }
 
-int WebRequest::HandleResponse(NSURLResponse *response, NSError *error) const {// Handle response here
+-(int) HandleResponse:(NSURLResponse *)response error: (NSError *)error {// Handle response here
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response; //must do type cast to get accss to statusCode etc
     int responseCode = (int)httpResponse.statusCode;
     NSString *errorMessage = [NSString stringWithFormat: @"%ld", (long)error.code];
@@ -158,7 +167,7 @@ int WebRequest::HandleResponse(NSURLResponse *response, NSError *error) const {/
     return responseCode;
 }
 
-NSURLSessionUploadTask *WebRequest::Post(std::string url, const char *postData)
+-(NSURLSessionUploadTask *)Post:(NSString *) url postData: (const char *)postData
 {
     NSString *str = [NSString stringWithCString: postData encoding:NSString.defaultCStringEncoding ];
     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
@@ -171,3 +180,4 @@ NSURLSessionUploadTask *WebRequest::Post(std::string url, const char *postData)
     
     return uploadTask;
 }
+@end
