@@ -2,10 +2,10 @@
 // Created by phz on 25.2.2021.
 //
 
-#import "ApprienProduct.h"
+#import "IapProduct.h"
 
 
-@implementation ApprienProduct
+@implementation IapProduct
 @synthesize baseIAPId;
 @synthesize apprienVariantIAPId;
 @synthesize store;
@@ -26,8 +26,8 @@
     return self;
 }
 
-- (ApprienProduct *)ApprienProduct:(NSString *)baseIapIdIn {
-    ApprienProduct *aP = [[ApprienProduct alloc] init];
+- (IapProduct *)ApprienProduct:(NSString *)baseIapIdIn {
+    IapProduct *aP = [[IapProduct alloc] init];
     aP.baseIAPId = baseIapIdIn;
     // Defaults the variant name to the base IAP id. FetchApprienPrice will replace this if fetch succeeds
     aP.apprienVariantIAPId = baseIapIdIn;

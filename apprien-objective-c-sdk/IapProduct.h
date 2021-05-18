@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ApprienProduct : NSObject
+@interface IapProduct : NSObject
 
 /// <summary>
 /// The base product id. Apprien will fallback to this id if a variant cannot be retrieved.

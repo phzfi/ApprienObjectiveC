@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* ApprienProduct.m */; };
-		1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		1B1828C1A9CE70DA49244897 /* IapProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B182BED67977C3E8D5C5384 /* IapProduct.m */; };
+		1B1829366E79A61CAB1692D4 /* IapProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B182CB7AFDB2CD2ECFFB6EB /* IapProduct.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		8B268655264973D5005CB03C /* libapprien-objective-c-sdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFC20FF25E3976000900BDC /* libapprien-objective-c-sdk.dylib */; };
 		8B26868A264BD0CF005CB03C /* FormDataSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B268689264BD0CF005CB03C /* FormDataSection.m */; };
 		8B4CE427263ACEF10034FCA6 /* json.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC21E225E5210A00900BDC /* json.hpp */; };
@@ -38,8 +38,8 @@
 
 /* Begin PBXFileReference section */
 		06945E19FF10F59D8066F1E6 /* Pods-apprien-objective-c-sdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.debug.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.debug.xcconfig"; sourceTree = "<group>"; };
-		1B182BED67977C3E8D5C5384 /* ApprienProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApprienProduct.m; sourceTree = "<group>"; };
-		1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApprienProduct.h; sourceTree = "<group>"; };
+		1B182BED67977C3E8D5C5384 /* IapProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IapProduct.m; sourceTree = "<group>"; };
+		1B182CB7AFDB2CD2ECFFB6EB /* IapProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IapProduct.h; sourceTree = "<group>"; };
 		572DF8B09BED7463611F02E2 /* Pods-apprien-objective-c-sdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apprien-objective-c-sdk.release.xcconfig"; path = "Target Support Files/Pods-apprien-objective-c-sdk/Pods-apprien-objective-c-sdk.release.xcconfig"; sourceTree = "<group>"; };
 		8B268681264BBFED005CB03C /* FormDataSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDataSection.h; sourceTree = "<group>"; };
 		8B268689264BD0CF005CB03C /* FormDataSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDataSection.m; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 				8BFC210425E3976000900BDC /* ApprienSdk.mm */,
 				8B268681264BBFED005CB03C /* FormDataSection.h */,
 				8B268689264BD0CF005CB03C /* FormDataSection.m */,
-				1B182BED67977C3E8D5C5384 /* ApprienProduct.m */,
-				1B182CB7AFDB2CD2ECFFB6EB /* ApprienProduct.h */,
+				1B182BED67977C3E8D5C5384 /* IapProduct.m */,
+				1B182CB7AFDB2CD2ECFFB6EB /* IapProduct.h */,
 			);
 			path = "apprien-objective-c-sdk";
 			sourceTree = "<group>";
@@ -161,7 +161,7 @@
 				8BFC222225E65B8400900BDC /* Apprien.h in Headers */,
 				8BFC221825E65B6B00900BDC /* WebRequest.h in Headers */,
 				8BFC222525E65B8800900BDC /* sha256.h in Headers */,
-				1B1829366E79A61CAB1692D4 /* ApprienProduct.h in Headers */,
+				1B1829366E79A61CAB1692D4 /* IapProduct.h in Headers */,
 				8BFC222825E65B8C00900BDC /* json.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,7 +285,7 @@
 				8BFC210525E3976000900BDC /* ApprienSdk.mm in Sources */,
 				8BFC222E25E65BA200900BDC /* Apprien.mm in Sources */,
 				8BFC222B25E65B9E00900BDC /* WebRequest.mm in Sources */,
-				1B1828C1A9CE70DA49244897 /* ApprienProduct.m in Sources */,
+				1B1828C1A9CE70DA49244897 /* IapProduct.m in Sources */,
 				8B26868A264BD0CF005CB03C /* FormDataSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

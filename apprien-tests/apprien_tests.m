@@ -7,7 +7,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ApprienSdk.h"
-#import "ApprienProduct.h"
+#import "IapProduct.h"
 
 @interface apprien_tests : XCTestCase
 
@@ -33,12 +33,11 @@ NSArray <NSString *> *testIAPids;
         if (token == nil) {
             token = @"";
         }
-    ApprienProduct *apprienProduct = [[ApprienProduct alloc] initWithBaseIapId:defaultIAPid];
+    IapProduct *apprienProduct = [[IapProduct alloc] initWithBaseIapId:defaultIAPid];
 
     products = [apprienProduct FromIAPCatalog:testIAPids];
-
-    apprienSdk = [[ApprienSdk alloc] init];
-    [apprienSdk ApprienManager:testPackageName integrationType:GooglePlayStore token:[token stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""]];
+    ApprienIntegrationType integrationType = GooglePlayStore;
+    apprienSdk = [[ApprienSdk alloc] initWithGamePackage:testPackageName integrationType:integrationType token:[token stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""]];
         
     }
     apprienSdk.DEBUGGING_ENABLED = TRUE;
@@ -76,11 +75,11 @@ NSArray <NSString *> *testIAPids;
 - (void)testSettingIntegrationType {
     @autoreleasepool {
         //Default is google set in the setup function
-        XCTAssertTrue(apprienSdk.IntegrationType == GooglePlayStore);
+        XCTAssertTrue([apprienSdk getIntegrationType] == GooglePlayStore);
         apprienSdk = nil;
         const ApprienIntegrationType appleIntegration = AppleAppStore;
-        apprienSdk = [[ApprienSdk alloc] init];
-        [apprienSdk ApprienManager:testPackageName integrationType:appleIntegration token:token];
+        apprienSdk = [[ApprienSdk alloc] initWithGamePackage:testPackageName integrationType:appleIntegration token:token];
+       
         const ApprienIntegrationType resultIntegrationType = apprienSdk.IntegrationType;
         XCTAssertTrue(resultIntegrationType == appleIntegration);
     }
@@ -148,6 +147,7 @@ NSArray <NSString *> *testIAPids;
     NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
     __block BOOL fetchPricesFinished;
     __block NSArray * productsOut = [[NSArray alloc] init];
+    
     [apprienSdk FetchApprienPrices:products callback:^(NSArray *productsWithPrices) {
         productsOut = productsWithPrices;
         fetchPricesFinished = TRUE;
@@ -159,13 +159,26 @@ NSArray <NSString *> *testIAPids;
     }
 
     for (int i = 0; i < [productsOut count]; i++) {
-        ApprienProduct *product = productsOut[i];
+        IapProduct *product = productsOut[i];
         NSString *expectedStringToBeFound = expectedVariantIdPart[i];
         //IOS7 compatible way of checking if string contains some other string
         XCTAssertTrue([product.apprienVariantIAPId rangeOfString:expectedStringToBeFound].location != NSNotFound);
     }
 }
 
+
+
+- (void)testJSONParserCanParseProducts {
+    #define MAKE_STRING(x) @#x
+    NSString *productsString = MAKE_STRING("products:
+    [
+        { "id": "1001", "type": "Regular" },
+        { "id": "1002", "type": "Chocolate" },
+        { "id": "1003", "type": "Blueberry" },
+        { "id": "1004", "type": "Devil's Food" }
+    ]");
+    NSArray *expectedVariantIdPart = @[@"apprien", @"apprien", @"test_product_3_sku", @"test_subscription_03", @"apprien"];
+}
 
 - (void)testFetchingProductsWithBadURLShouldFail {
 
@@ -184,8 +197,8 @@ NSArray <NSString *> *testIAPids;
     }
 
     for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
-        ApprienProduct *expectedStringToBeFound = expectedVariantIdPart[i];
+        IapProduct *product = products[i];
+        IapProduct *expectedStringToBeFound = expectedVariantIdPart[i];
         XCTAssertEqual(product.apprienVariantIAPId, expectedStringToBeFound.apprienVariantIAPId);
     }
 }
@@ -205,8 +218,8 @@ NSArray <NSString *> *testIAPids;
     }
 
     for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
-        ApprienProduct *expectedStringToBeFound = expectedVariantIdPart[i];
+        IapProduct *product = products[i];
+        IapProduct *expectedStringToBeFound = expectedVariantIdPart[i];
         XCTAssertEqual(product.apprienVariantIAPId, expectedStringToBeFound.apprienVariantIAPId);
     }
 }
@@ -235,8 +248,8 @@ NSArray <NSString *> *testIAPids;
     }
 
     for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
-        ApprienProduct *expectedStringToBeFound = expectedVariantIdPart[i];
+        IapProduct *product = products[i];
+        IapProduct *expectedStringToBeFound = expectedVariantIdPart[i];
         XCTAssertEqual(product.apprienVariantIAPId, expectedStringToBeFound.apprienVariantIAPId);
     }
 }
@@ -281,7 +294,7 @@ size_t writeFunction(void *ptr, size_t size, size_t nmemb, char *data) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2.25, false);
     }
     for (int i = 0; i < [products count]; i++) {
-        ApprienProduct *product = products[i];
+        IapProduct *product = products[i];
         NSString *expectedIapId = [testIAPids[i] stringByAppendingString:@"-variant"];
         NSString *resultId = product.apprienVariantIAPId;
         XCTAssertEqual(expectedIapId, resultId);

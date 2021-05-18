@@ -6,7 +6,7 @@
  */
 #import <Foundation/Foundation.h>
 
-@class ApprienProduct;//needed for getting apprien products in api calls.
+@class IapProduct;//needed for getting apprien products in api calls.
 
 /*!
  @abstract Used to tell Apprien which store to use.
@@ -42,7 +42,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Define the store ApprienManager should integrate against, e.g. GooglePlayStore
 */
-@property(nonatomic) NSUInteger *IntegrationType;
+@property(nonatomic, assign, getter = getIntegrationType) ApprienIntegrationType IntegrationType;
 
 /*!
  @abstract Logs raw information about request results
@@ -79,7 +79,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 */
 @property(nonatomic) NSString *REST_POST_RECEIPT_URL;
 
-- (NSArray<ApprienProduct*> *)CopyApprienProductsFromData: data: (NSData *) data;
+- (NSArray<IapProduct*> *)CopyApprienProductsFromData: data: (NSData *) data;
 
 /*!
  @abstract Apprien REST API endpoint for POSTing the receipt json for successful transactions
@@ -110,15 +110,15 @@ typedef enum ApprienIntegrationType : NSUInteger {
  @param callback that is called when all product variant requests have completed. It returns array of apprienProducts
  that contain variant ids. From these can the prices be extracted.
  */
-- (void)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback;
+- (void)FetchApprienPrices:(NSArray *)apprienProducts callback:(void (^)(NSArray <IapProduct *> *productsWithPrices))callback;
 
 /*!
- @abstract Initializes a new instance of the ApprienManager
+ @abstract Initializes a new instance of the ApprienSDK
  @param gamePackageName The package name of the game. Usually Application.identifier
  @param integrationType Store integration, e.g. GooglePlayStore, AppleAppStore.
  @param token Token, retrieved from the Apprien Dashboard.
 */
-- (void)ApprienManager:(NSString *)gamePackageName integrationType:(int)integrationType token:(NSString *)token;
+- (ApprienSdk *)initWithGamePackage:(NSString *)gamePackageName integrationType:(int)integrationType token:(NSString *)token;
 
 /*!
  @abstract  Perform an availability check for the Apprien service and test the validity of the OAuth2 token.
@@ -145,7 +145,7 @@ typedef enum ApprienIntegrationType : NSUInteger {
 /*!
  @abstract Tell Apprien that these products were shown. NOTE: This is needed for Apprien to work correctly.
 */
-- (void)ProductsShown:(NSArray<ApprienProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler;
+- (void)ProductsShown:(NSArray<IapProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler;
 
 /*!
  @abstract Parses the base IAP id from the Apprien response (variant IAP id)

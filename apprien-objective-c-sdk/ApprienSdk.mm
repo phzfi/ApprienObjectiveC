@@ -6,7 +6,7 @@
 //
 
 #import "ApprienSdk.h"
-#import "ApprienProduct.h"
+#import "IapProduct.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "FormDataSection.h"
 #import "WebRequest.h"
@@ -27,12 +27,12 @@ NSArray *integrationTypes;
 -(id)init {
      if (self = [super init])  {
        self.REQUEST_TIMEOUT = 10;
-         self.REST_GET_PRICE_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/products/%s/prices";
-         self.REST_GET_ALL_PRICES_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/prices";
+         self.REST_GET_PRICE_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/products/%s/prices";
+         self.REST_GET_ALL_PRICES_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/prices";
          self.REST_GET_VALIDATE_TOKEN_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
          self.REST_GET_APPRIEN_STATUS = @"http://game.apprien.com/status";
          self.REST_POST_ERROR_URL = @"http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
-         self.REST_POST_RECEIPT_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/receipts";
+         self.REST_POST_RECEIPT_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/receipts";
          self.REST_POST_PRODUCTS_SHOWN_URL = @"http://game.apprien.com/api/v1/stores/%s/shown/products";
          self.DeviceUniqueIdentifier = @"";
          integrationTypes =  [NSArray arrayWithObjects: @"google", @"apple", nil];
@@ -40,14 +40,31 @@ NSArray *integrationTypes;
      return self;
 }
 
-- (void)ApprienManager:(NSString *)gamePackageName integrationType:(NSUInteger *) integrationType token:(NSString *)token {
-    self.gamePackageName = gamePackageName;
-    self.IntegrationType = integrationType;
-    self.token = token;
+-(ApprienSdk *)initWithGamePackage:(NSString *)gamePackageName integrationType:(ApprienIntegrationType) integrationType token:(NSString *)token {
+     if (self = [super init])  {
+       self.REQUEST_TIMEOUT = 10;
+         self.REST_GET_PRICE_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/products/%s/prices";
+         self.REST_GET_ALL_PRICES_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/prices";
+         self.REST_GET_VALIDATE_TOKEN_URL = @"http://game.apprien.com/api/v1/stores/%s/games/%s/auth";
+         self.REST_GET_APPRIEN_STATUS = @"http://game.apprien.com/status";
+         self.REST_POST_ERROR_URL = @"http://game.apprien.com/error?message=%s&responseCode=%s&storeGame=%s&store=%s";
+         self.REST_POST_RECEIPT_URL = @"http://game.apprien.com/api/v0/stores/%s/games/%s/receipts";
+         self.REST_POST_PRODUCTS_SHOWN_URL = @"http://game.apprien.com/api/v1/stores/%s/shown/products";
+         self.DeviceUniqueIdentifier = @"";
+         integrationTypes =  [NSArray arrayWithObjects: @"google", @"apple", nil];
+         self.gamePackageName = gamePackageName;
+         self.IntegrationType = integrationType;
+         self.token = token;
+     }
+     return self;
+}
+
+- (ApprienIntegrationType)getIntegrationType {
+    return IntegrationType;
 }
 
 - (NSString *)deviceUniqueIdentifier {
-    return self.DeviceUniqueIdentifier;
+    return DeviceUniqueIdentifier;
 }
 
 - (NSString *)StoreIdentifier {
@@ -150,7 +167,7 @@ NSArray *integrationTypes;
     });*/
 }
 
-- (void)ProductsShown:(NSArray<ApprienProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler{
+- (void)ProductsShown:(NSArray<IapProduct *> *)apprienProducts completionHandler: (void (^)())completionHandler{
     @autoreleasepool {
        /* NSArray<FormDataSection*> *formData = [[NSArray<FormDataSection*> alloc ]  init];
         for [[(unsigned int i = 0; i < [apprienProducts length]; i++) {
@@ -188,7 +205,7 @@ NSArray *integrationTypes;
     return result;
 }
 
-- (void)FetchApprienPrices:(NSArray <ApprienProduct *> *)apprienProducts callback:(void (^)(NSArray <ApprienProduct *> *productsWithPrices))callback {
+- (void)FetchApprienPrices:(NSArray <IapProduct *> *)apprienProducts callback:(void (^)(NSArray <IapProduct *> *productsWithPrices))callback {
    
     WebRequest *request = [[WebRequest alloc] init];
     
@@ -208,7 +225,7 @@ NSArray *integrationTypes;
            //TODO: handle error sending
         }
         
-        NSMutableArray<ApprienProduct*> *apprienProductsOut = [self CopyApprienProductsFromData:data];
+        NSMutableArray<IapProduct*> *apprienProductsOut = [self CopyApprienProductsFromData:data];
         if([apprienProductsOut count] == 0){
             callback(apprienProducts);
         }
@@ -218,11 +235,11 @@ NSArray *integrationTypes;
     }] resume];
 }
 
-- (NSMutableArray<ApprienProduct*> *)CopyApprienProductsFromData: (NSData *) data{
+- (NSMutableArray<IapProduct*> *)CopyApprienProductsFromData: (NSData *) data{
     @autoreleasepool {
         NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         
-        NSMutableArray<ApprienProduct*> *products = [self GetProducts:data];
+        NSMutableArray<IapProduct*> *products = [self GetProducts:data];
         
         return products;
     }
@@ -231,8 +248,8 @@ NSArray *integrationTypes;
 /// <summary>
 /// Parse the JSON data and update the variant IAP ids.
 /// </summary>
--(NSMutableArray<ApprienProduct*>*) GetProducts: (NSData *)data {
-    NSArray<ApprienProduct*> *products = [[NSArray alloc] init];
+-(NSMutableArray<IapProduct*>*) GetProducts: (NSData *)data {
+    NSArray<IapProduct*> *products = [[NSArray alloc] init];
    
         //products = [self ParseJSON: data];
         
